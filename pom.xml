@@ -1,0 +1,264 @@
+<?xml version="1.0" encoding="UTF-8"?>
+
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+  <modelVersion>4.0.0</modelVersion>
+  <groupId>it.unibz.sonarqube_extension</groupId>
+  <artifactId>Sonar_extension</artifactId>
+  <version>0.0.1-SNAPSHOT</version>
+  <packaging>sonar-plugin</packaging>
+  <name>it.unibz.plugins.ptidej_integration</name>
+  <description>A plugin for integrating ptidej into sonarqube</description>
+  
+  <dependencies>
+  	
+  	<dependency>
+		<groupId>org.codehaus.sonar</groupId>
+		<artifactId>sonar-plugin-api</artifactId>
+		<version>5.0.1</version>
+		<scope>provided</scope>
+	</dependency>
+  	
+  	<dependency>
+         <groupId>padl-analyses</groupId>
+         <artifactId>padl-analyses</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+     <dependency>
+         <groupId>padl-aol</groupId>
+         <artifactId>padl-aol</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    <dependency>
+         <groupId>org.apache.commons</groupId>
+         <artifactId>commons-csv</artifactId>
+         <version>1.0</version>
+    </dependency>
+	
+	<dependency>
+         <groupId>lang</groupId>
+         <artifactId>lang</artifactId>
+         <version>1.0</version>
+    </dependency>
+	
+	<dependency>
+         <groupId>commons-io</groupId>
+         <artifactId>commons-io</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    <dependency>
+         <groupId>ptidej</groupId>
+         <artifactId>ptidej</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+        <dependency>
+         <groupId>padl-cpp</groupId>
+         <artifactId>padl-cpp</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    <dependency>
+         <groupId>padl-csharpv1</groupId>
+         <artifactId>padl-csharpv1</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    <dependency>
+         <groupId>padl-csharpv2</groupId>
+         <artifactId>padl-csharpv2</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    <dependency>
+         <groupId>padl-creator-cpp</groupId>
+         <artifactId>padl-creator-cpp</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+     <dependency>
+         <groupId>padl-creator</groupId>
+         <artifactId>padl-creator</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+     <dependency>
+         <groupId>cfparse</groupId>
+         <artifactId>cfparse</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+     <dependency>
+         <groupId>bcel-findbugs</groupId>
+         <artifactId>bcel-findbugs</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+
+    
+    <dependency>
+         <groupId>ptidej-smell</groupId>
+         <artifactId>ptidej-smell</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.core.runtime_3.11.1.v20150903</groupId>
+    	<artifactId>org.eclipse.core.runtime_3.11.1.v20150903</artifactId>
+    	<version>1804</version>
+    </dependency>
+    
+    <dependency>
+         <groupId>org.eclipse.core.resources</groupId>
+         <artifactId>org.eclipse.core.resources</artifactId>
+         <version>1.0</version>
+    </dependency>
+    
+    
+    <dependency>
+    	<groupId>javax.annotation</groupId>
+    	<artifactId>javax.annotation</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>javax.inject</groupId>
+    	<artifactId>javax.inject</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    
+    <dependency>
+    	<groupId>org.eclipse.core.contenttype</groupId>
+    	<artifactId>org.eclipse.core.contenttype</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.core.jobs</groupId>
+    	<artifactId>org.eclipse.core.jobs</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    
+    
+ 
+   
+   
+    
+
+    <dependency>
+    	<groupId>org.eclipse.equinox.app</groupId>
+    	<artifactId>org.eclipse.equinox.app</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.equinox.common</groupId>
+    	<artifactId>org.eclipse.equinox.common</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.equinox.preferences</groupId>
+    	<artifactId>org.eclipse.equinox.preferences</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.equinox.registry</groupId>
+    	<artifactId>org.eclipse.equinox.registry</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.jdt.compiler.apt</groupId>
+    	<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.jdt.compiler.tool</groupId>
+    	<artifactId>org.eclipse.jdt.compiler.tool</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.jdt.core</groupId>
+    	<artifactId>org.eclipse.jdt.core</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.jface.text</groupId>
+    	<artifactId>org.eclipse.jface.text</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.osgi.compatibility.state</groupId>
+    	<artifactId>org.eclipse.osgi.compatibility.state</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.osgi</groupId>
+    	<artifactId>org.eclipse.osgi</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+    <dependency>
+    	<groupId>org.eclipse.text</groupId>
+    	<artifactId>org.eclipse.text</artifactId>
+    	<version>1.0</version>
+    </dependency>
+    
+   	<dependency>
+ 		<groupId>org.eclipse.core.runtime.compatibility.registry</groupId>
+ 		<artifactId>org.eclipse.core.runtime.compatibility.registry</artifactId>
+ 		<version>1.0</version>
+ 	</dependency>
+ 	
+ 	<dependency>
+ 		<groupId>motifs</groupId>
+ 		<artifactId>motifs</artifactId>
+ 		<version>1.0</version>
+ 	</dependency>
+    
+
+    
+
+  </dependencies>
+ 
+  	<build>
+		<plugins>
+			
+			<plugin>
+				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
+				<artifactId>sonar-packaging-maven-plugin</artifactId>
+				<version>1.15</version>
+				<extensions>true</extensions>
+				<configuration>
+					<pluginClass>it.unibz.sonarqube_plugin.CodeSmellPlugin</pluginClass>
+					<pluginKey>testplugin</pluginKey>
+				</configuration>
+			</plugin>
+
+			<plugin>
+				<groupId>org.apache.maven.plugins</groupId>
+				<artifactId>maven-compiler-plugin</artifactId>
+				<version>3.1</version>
+				<configuration>
+					<source>1.7</source>
+					<target>1.7</target>
+				</configuration>
+			</plugin>
+
+
+		</plugins>
+	</build>
+  
+ </project>
+
