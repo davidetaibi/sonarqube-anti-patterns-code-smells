@@ -1,7 +1,7 @@
 # sonarqube-code-smells
 
 <h2> Description </h2>
-This plugin detects the Ptidej 5 antipatterns from source code every time each analysis.
+This plugin detects the Ptidej 5 (https://bitbucket.org/ptidejteam/ptidej-5) antipatterns from source code every time each analysis.
 
 <h2> List of the antipattern detected ant its definitions </h2>
 
@@ -24,6 +24,9 @@ This plugin detects the Ptidej 5 antipatterns from source code every time each a
 <p><b>SwissArmyKnife:</b> A complex class that offers a high number of services, for example, a complex class implementing a high number of interfaces. </p>
 <p><b>TraditionBreaker:</b> A class that inherits from a large parent class but that provides little behaviour and without subclasses.
  </p>
+ 
+<h2> Licence </h2>
+GNU Public License v2.
 
 
 
