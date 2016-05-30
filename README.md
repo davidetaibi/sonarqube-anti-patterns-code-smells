@@ -29,8 +29,8 @@ This plugin detects the Ptidej 5 (https://bitbucket.org/ptidejteam/ptidej-5) ant
 GNU Public License v2.
 
 <h2> How to install </h2>
--- Put the jar Antipatters.jar from the target folder in the plugins folder of your Sonarqube installation.
--- Restart the Sonarqube process in your machine
+<p> -- Put the jar Antipatters.jar from the target folder in the plugins folder of your Sonarqube installation.</p>
+<p> -- Restart the Sonarqube process in your machine. </p>
 
 
 
