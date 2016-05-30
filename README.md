@@ -5,6 +5,6 @@ This plugin detects the Ptidej 5 antipatterns from source code every time each a
 
 <h2> List of the antipattern detected ant its definitions </h2>
 
-AntiSingleton: A class that provides mutable class variables, which consequently could be used as global variables.
-BaseClassKnowsDerivedClass: A class that invokes or has at least binary-class relationship pointing to one of its subclasses.
-BaseClassShouldBeAbstract: 	A class that has many subclasses without being abstract.
+<b>AntiSingleton:</b> A class that provides mutable class variables, which consequently could be used as global variables.
+<b>BaseClassKnowsDerivedClass:</b> A class that invokes or has at least binary-class relationship pointing to one of its subclasses.
+<b>BaseClassShouldBeAbstract:</b> 	A class that has many subclasses without being abstract.
