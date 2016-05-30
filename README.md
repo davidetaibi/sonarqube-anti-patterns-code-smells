@@ -23,10 +23,15 @@ This plugin detects the Ptidej 5 (https://bitbucket.org/ptidejteam/ptidej-5) ant
 <p><b>SpeculativeGenerality:</b> A class that is defined as abstract but that has very few children, which do not make use of its methods </p>
 <p><b>SwissArmyKnife:</b> A complex class that offers a high number of services, for example, a complex class implementing a high number of interfaces. </p>
 <p><b>TraditionBreaker:</b> A class that inherits from a large parent class but that provides little behaviour and without subclasses.
- </p>
+</p>
  
 <h2> Licence </h2>
 GNU Public License v2.
+
+<h2> How to install </h2>
+-- Put the jar Antipatters.jar from the target folder in the plugins folder of your Sonarqube installation.
+-- Restart the Sonarqube process in your machine
+
 
 
 
