@@ -1,7 +1,7 @@
 # sonarqube-code-smells
 
 <h2> Description </h2>
-This plugin detects the Ptidej 5 (https://bitbucket.org/ptidejteam/ptidej-5) antipatterns from source code every time each analysis.
+This plugin detects the Ptidej 5 (https://bitbucket.org/ptidejteam/ptidej-5) antipatterns from source code every time after each analysis.
 
 <h2> List of the antipattern detected ant its definitions </h2>
 
@@ -29,7 +29,7 @@ This plugin detects the Ptidej 5 (https://bitbucket.org/ptidejteam/ptidej-5) ant
 GNU Public License v2.
 
 <h2> How to install </h2>
-<p> -- Put the jar Antipatters.jar from the target folder in the plugins folder of your Sonarqube installation.</p>
+<p> -- Put the jar Antipatterns.0.1.jar from the target folder in the plugins folder of your Sonarqube installation.</p>
 <p> -- Restart the Sonarqube process in your machine. </p>
 
 
