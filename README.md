@@ -1,4 +1,4 @@
-This sonarqube plugin detects anti patterns and code smells, by means of the [Ptidej 5 library](https://bitbucket.org/ptidejteam/ptidej-5).
+This sonarqube plugin detects anti patterns and code smells, as defined by Martin Fowler<sup>[1](#myfootnote1)</sup>, by means of the [Ptidej 5 library](https://bitbucket.org/ptidejteam/ptidej-5).
 
 ## Antipatterns and code smells detected (Metrics)
 
@@ -64,4 +64,5 @@ We are planning to extend the plug-in in the next months. However, any help is h
 * Empirical study to test the code smells effectiveness 
 
 
-
+##References
+<a name="myfootnote1">1</a>Fowler, Martin. "CodeSmell". http://martinfowler.com/. Retrieved July 2014
