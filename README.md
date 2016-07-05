@@ -22,6 +22,12 @@ This sonarqube plugin detects anti patterns and code smells, by means of the [Pt
 
 **LongMethod:** A class that has (at least) a method that is very long, in term of LOCs.
 
+* Dedicated widget
+**  In the current version, a custom widget must be manually created (Custom Widget - Add Widget) 
+* Increase analysis performances 
+* Standalone implementation (whithout the ptidej-5 libraries) 
+* Empirical study to test the code smells effectiveness 
+
 **LongParameterList:** A class that has (at least) one method with a too long list of parameters in comparison to the average number of parameters per methods in the system.
 
 **ManyFieldAttributesButNotComplex:** A class that declares many attributes but which is not complex and, hence, more likely to be some kind of data class holding values without providing behaviour.
