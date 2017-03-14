@@ -68,9 +68,14 @@ public class ExampleSensor implements Sensor {
 		String projectName = project.getName();
 		String date = project.getAnalysisDate().toString();
 
-		String[] SMELLS = new String[] { "Blob", "ClassDataShouldBePrivate", "ComplexClass", "FunctionalDecomposition",
-				"SpaghettiCode" };
-
+		String[] SMELLS = new String[] { "AntiSingleton",
+				"BaseClassKnowsDerivedClass", "BaseClassShouldBeAbstract", "Blob",
+				"ClassDataShouldBePrivate", "ComplexClass",
+				"FunctionalDecomposition", "LargeClass", "LazyClass", "LongMethod",
+				"LongParameterList", "ManyFieldAttributesButNotComplex",
+				"MessageChains", "RefusedParentBequest", "SpaghettiCode",
+				"SpeculativeGenerality", "SwissArmyKnife", "TraditionBreaker" };
+		
 		String rootFolder = settings.getString("sonar.projectBaseDir");
 		LOG.info("BaseDir----->" + rootFolder);
 
@@ -142,7 +147,12 @@ public class ExampleSensor implements Sensor {
 			final ArrayList<OccurrenceComponent> listOccComponents = (ArrayList<OccurrenceComponent>) occ
 					.getComponents();
 			if (!listOccComponents.isEmpty()) {
-				final OccurrenceComponent solutionComponent = (OccurrenceComponent) listOccComponents.get(0);
+				final OccurrenceComponent solutionComponent;	
+				if(codesmellName.matches("AntiSingleton|RefusedParentBequest")) {	
+					solutionComponent = (OccurrenceComponent) listOccComponents.get(1);
+				}else { 
+					solutionComponent = (OccurrenceComponent) listOccComponents.get(0);
+				}
 
 				String rawClassName = new String(solutionComponent.getValue());
 				System.out.println("Infected class detected by ptidej ---> " + rawClassName);
@@ -211,7 +221,100 @@ public class ExampleSensor implements Sensor {
 										.message("Spaghetti Code").build();
 								issuable.addIssue(issue5);
 								break;
+							
+							case "AntiSingleton":
+								Issue issue6 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "antisingleton")).line(10)
+										.message("AntiSingleton").build();
+								issuable.addIssue(issue6);
+								break;	
+							
+							case "BaseClassKnowsDerivedClass":
+								Issue issue7 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "baseclass_knows_derived")).line(10)
+										.message("BaseClass Knows Derived Class").build();
+								issuable.addIssue(issue7);
+								break;
+							
+							case "BaseClassShouldBeAbstract":
+								Issue issue8 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "baseclass_abstract")).line(10)
+										.message("Base Class Should Be Abstract").build();
+								issuable.addIssue(issue8);
+								break;
+							
+							case "LargeClass":
+								Issue issue9 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "large_class")).line(10)
+										.message("Large Class").build();
+								issuable.addIssue(issue9);
+								break;
+							
+							case "LazyClass":
+								Issue issue10 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "lazy_class")).line(10)
+										.message("Lazy Class").build();
+								issuable.addIssue(issue10);
+								break;
+							
+							case "LongMethod":
+								Issue issue11 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "long_method")).line(10)
+										.message("Long Method").build();
+								issuable.addIssue(issue11);
+								break;
+							
+							case "LongParameterList":
+								Issue issue12 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "long_parameter_list")).line(10)
+										.message("Long Parameter List").build();
+								issuable.addIssue(issue12);
+								break;
+							
+							case "ManyFieldAttributesButNotComplex":
+								Issue issue13 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "many_field_attributes_not_complex")).line(10)
+										.message("Many Field Attributes But Not Complex").build();
+								issuable.addIssue(issue13);
+								break;
+							
+							case "MessageChains":
+								Issue issue14 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "message_chains")).line(10)
+										.message("Message Chains").build();
+								issuable.addIssue(issue14);
+								break;
+							
+							case "RefusedParentBequest":
+								Issue issue15 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "refused_parent_bequest")).line(10)
+										.message("Refused Parent Bequest").build();
+								issuable.addIssue(issue15);
+								break;
+							
+							case "SpeculativeGenerality":
+								Issue issue16 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "speculative_generality")).line(10)
+										.message("Speculative Generality").build();
+								issuable.addIssue(issue16);
+								break;
+							
+							case "SwissArmyKnife":
+								Issue issue17 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "swiss_army_knife")).line(10)
+										.message("Swiss Army Knife").build();
+								issuable.addIssue(issue17);
+								break;
+							
+							case "TraditionBreaker":
+								Issue issue18 = issuable.newIssueBuilder()
+										.ruleKey(RuleKey.of("code_smells", "tradition_breaker")).line(10)
+										.message("Tradition Breaker").build();
+								issuable.addIssue(issue18);
+								break;	
 							}
+							
+							
 
 						}
 						paths.remove(clNamePath);

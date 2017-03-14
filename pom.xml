@@ -8,6 +8,14 @@
   <packaging>sonar-plugin</packaging>
   <name>it.unibz.plugins.ptidej_integration</name>
   <description>A plugin for integrating ptidej into sonarqube</description>
+
+    <repositories>
+        <repository>
+            <id>gv-maven-repo</id>
+            <name>gv-maven-repo</name>
+            <url>https://gv-maven-repo.appspot.com/</url>
+        </repository>
+    </repositories>
   
   <dependencies>
   	
@@ -243,6 +251,7 @@
 				<configuration>
 					<pluginClass>it.unibz.sonarqube_plugin.CodeSmellPlugin</pluginClass>
 					<pluginKey>testplugin</pluginKey>
+                    <finalName>Code_Smells-0.1</finalName>
 				</configuration>
 			</plugin>
 
