@@ -77,7 +77,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 				"SpeculativeGenerality", "SwissArmyKnife", "TraditionBreaker" };
 		
 		String rootFolder = settings.getString("sonar.projectBaseDir");
-		LOG.info("BaseDir----->" + rootFolder);
+		LOG.debug("BaseDir----->" + rootFolder);
 
 		String[] root_paths = new String[] { rootFolder };
 		String[] source_paths = new String[] { rootFolder };
@@ -350,8 +350,8 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 			final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel(aName);
 			codeLevelModel.create(creator);
 			final long endTime = System.currentTimeMillis();
-			LOG.info("Model built in "+ (endTime - startTime)+" ms.");
-			LOG.info("Model contains "+codeLevelModel.getNumberOfTopLevelEntities()+ " top-level entities.");
+			LOG.debug("Model built in "+ (endTime - startTime)+" ms.");
+			LOG.debug("Model contains "+codeLevelModel.getNumberOfTopLevelEntities()+ " top-level entities.");
 
 			// try {
 			final padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator annotator2 = new padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator(
