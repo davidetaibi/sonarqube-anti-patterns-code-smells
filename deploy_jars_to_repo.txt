@@ -1,0 +1,263 @@
+# The jars in /lib directory can be added to a maven repo using the commands in this file
+# - Needs admin access to the repo (in Windows login data is normally saved in C:/Users/<username>/.m2/settings.xml)
+# - https://maven.apache.org/settings.html
+#
+# To make a repository made from [https://github.com/renaudcerrato/appengine-maven-repository] public:
+# - in resource/RepositoryResource.java, remove/comment the lines with annotation @RolesAllowed(.., ROLE_READ, ..)
+# - recompile project in google console
+
+mvn deploy:deploy-file -DgroupId=ptidej
+  -DartifactId=ptidej
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/ptidej-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-analyses
+  -DartifactId=padl-analyses
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-analyses-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-aol
+  -DartifactId=padl-aol
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-aol-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=commons-csv
+  -DartifactId=commons-csv
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/commons-csv-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=lang
+  -DartifactId=lang
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/lang-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-cpp
+  -DartifactId=padl-cpp
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-cpp-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-csharpv1
+  -DartifactId=padl-csharpv1
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-csharpv1-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-csharpv2
+  -DartifactId=padl-csharpv2
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-csharpv2-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-creator-cpp
+  -DartifactId=padl-creator-cpp
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-creator-cpp-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=padl-creator
+  -DartifactId=padl-creator
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/padl-creator-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=cfparse
+  -DartifactId=cfparse
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/cfparse-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=bcel-findbugs
+  -DartifactId=bcel-findbugs
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/bcel-findbugs-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=ptidej-smell
+  -DartifactId=ptidej-smell
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/ptidej-smell-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=javax.annotation
+  -DartifactId=javax.annotation
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/javax.annotation-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=javax.inject
+  -DartifactId=javax.inject
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/javax.inject-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=motifs
+  -DartifactId=motifs
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/motifs-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+  
+mvn deploy:deploy-file -DgroupId=org.eclipse.core.runtime_3.11.1.v20150903
+  -DartifactId=org.eclipse.core.runtime_3.11.1.v20150903
+  -Dversion=1804
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.core.runtime_3.11.1.v20150903-1804.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.core.resources
+  -DartifactId=org.eclipse.core.resources
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.core.resources-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.core.contenttype
+  -DartifactId=org.eclipse.core.contenttype
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.core.contenttype-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.core.jobs
+  -DartifactId=org.eclipse.core.jobs
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.core.jobs-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.equinox.app
+  -DartifactId=org.eclipse.equinox.app
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.equinox.app-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.equinox.common
+  -DartifactId=org.eclipse.equinox.common
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.equinox.common-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.equinox.preferences
+  -DartifactId=org.eclipse.equinox.preferences
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.equinox.preferences-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.equinox.registry
+  -DartifactId=org.eclipse.equinox.registry
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.equinox.registry-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.jdt.compiler.apt
+  -DartifactId=org.eclipse.jdt.compiler.apt
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.jdt.compiler.apt-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.jdt.compiler.tool
+  -DartifactId=org.eclipse.jdt.compiler.tool
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.jdt.compiler.tool-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.jdt.core
+  -DartifactId=org.eclipse.jdt.core
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.jdt.core-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.jface.text
+  -DartifactId=org.eclipse.jface.text
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.jface.text-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.osgi.compatibility.state
+  -DartifactId=org.eclipse.osgi.compatibility.state
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.osgi.compatibility.state-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.osgi
+  -DartifactId=org.eclipse.osgi
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.osgi-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.text
+  -DartifactId=org.eclipse.text
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.text-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
+
+mvn deploy:deploy-file -DgroupId=org.eclipse.core.runtime.compatibility.registry
+  -DartifactId=org.eclipse.core.runtime.compatibility.registry
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/org.eclipse.core.runtime.compatibility.registry-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/
