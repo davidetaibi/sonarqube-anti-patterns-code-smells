@@ -3,11 +3,75 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.unibz.sonarqube_extension</groupId>
-  <artifactId>Sonar_extension</artifactId>
-  <version>0.0.1-SNAPSHOT</version>
+  <artifactId>CodeSmellsAntiPatterns</artifactId>
+  <version>0.0.2</version>
   <packaging>sonar-plugin</packaging>
-  <name>it.unibz.plugins.ptidej_integration</name>
-  <description>A plugin for integrating ptidej into sonarqube</description>
+  <name>Code Smells and Anti Patterns detection</name>
+  <description>A plugin for analysing code smells and antipatterns through the ptidej library</description>
+  
+  
+  
+  <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>
+  <inceptionYear>2016</inceptionYear>
+
+
+
+
+
+  <organization>
+    <name>Free University of Bolzano Bozen</name>
+    <url>https://www.unibz.it</url>
+  </organization>
+
+  <licenses>
+    <license>
+      <name>GNU LGPL 3</name>
+      <url>http://www.gnu.org/licenses/lgpl.txt</url>
+      <distribution>repo</distribution>
+    </license>
+  </licenses>
+
+  <developers>
+    <developer>
+      <id>GAina</id>
+      <name>Giuseppe Aina</name>
+      <timezone>+1</timezone>
+    </developer>
+    
+        <developer>
+      <id>AStan</id>
+      <name>Alexandru Stan</name>
+      <timezone>+1</timezone>
+    </developer>
+    
+        <developer>
+      <id>GVenters</id>
+      <name>Gustavs Venters</name>
+      <timezone>+1</timezone>
+    </developer>
+    
+        <developer>
+      <id>DTaibi</id>
+      <name>Davide Taibi</name>
+      <timezone>+1</timezone>
+    </developer>
+    
+  </developers>
+
+  <scm>
+    <connection>scm:git:git@github.com:davidetaibi/sonarqube-anti-patterns-code-smells.git</connection>
+    <developerConnection>scm:git:git@github.com:davidetaibi/sonarqube-anti-patterns-code-smells.git</developerConnection>
+    <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>
+
+  </scm>
+
+  <issueManagement>
+    <system>Git</system>
+    <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells/issues</url>
+</issueManagement>
+  
+  
+  
 
     <repositories>
         <repository>
@@ -249,9 +313,9 @@
 				<version>1.15</version>
 				<extensions>true</extensions>
 				<configuration>
-					<pluginClass>it.unibz.sonarqube_plugin.CodeSmellPlugin</pluginClass>
-					<pluginKey>testplugin</pluginKey>
-                    <finalName>Code_Smells-0.1</finalName>
+					<pluginClass>it.unibz.sonarqube_plugin.CodeSmellsAntiPatternsPlugin</pluginClass>
+					<pluginKey>CodeSmellsAntiPatterns</pluginKey>
+                    <finalName>CodeSmellsAntiPatterns-0.2</finalName>
 				</configuration>
 			</plugin>
 

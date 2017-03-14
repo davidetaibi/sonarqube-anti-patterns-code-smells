@@ -41,7 +41,7 @@ import util.io.ProxyConsole;
 import util.io.ProxyDisk;
 import util.io.ReaderInputStream;
 
-public class ExampleSensor implements Sensor {
+public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 	private Settings settings;
 	private final FileSystem fs;
@@ -52,7 +52,7 @@ public class ExampleSensor implements Sensor {
 	/**
 	 * Use of IoC to get Settings
 	 */
-	public ExampleSensor(Settings settings, FileSystem fs, ResourcePerspectives p) {
+	public CodeSmellsAntiPatternsSensor(Settings settings, FileSystem fs, ResourcePerspectives p) {
 		this.settings = settings;
 		this.fs = fs;
 		this.perspectives = p;
@@ -86,7 +86,11 @@ public class ExampleSensor implements Sensor {
 
 	}
 
-	public static void extractFilesFromDir(final String aPath, final String anExtension,
+	/*public static void extractFilesFromDir(final String aPath, final String anExtension,
+			final ArrayList<String> aListOfFiles)
+			//removed static
+			*/
+	public void extractFilesFromDir(final String aPath, final String anExtension,
 			final ArrayList<String> aListOfFiles) {
 
 		final File pathFile = new File(aPath);
@@ -100,7 +104,7 @@ public class ExampleSensor implements Sensor {
 				} else {
 					if (// fileName.indexOf("org.eclipse.") > 0 &&
 					fileName.endsWith(anExtension)) {
-						System.out.println(fileName);
+						LOG.trace(fileName);
 						aListOfFiles.add(fileName);
 					}
 				}
@@ -122,7 +126,7 @@ public class ExampleSensor implements Sensor {
 
 		final Occurrence[] allOccurrences = solutionBuilder.getAllOccurrences(properties);
 		final int nbAllOcc = allOccurrences.length;
-		System.out.println("How many classes infected by --> " + codesmellName + " ----> " + nbAllOcc);
+		LOG.debug("How many classes infected by --> " + codesmellName + " ----> " + nbAllOcc);
 
 		FilePredicates f = this.fs.predicates();
 		FilePredicate fp = f.all();
@@ -131,15 +135,14 @@ public class ExampleSensor implements Sensor {
 		ArrayList<String> paths = new ArrayList<String>();
 
 		for (File file : files) {
-			LOG.info("Usi ptidej o no?");
-			LOG.info("Adding to paths list: " + file.getAbsolutePath());
+			LOG.debug("ptidej - Adding to paths list: " + file.getAbsolutePath());
 			if(file.getAbsolutePath().endsWith(".java")) {
 				paths.add(file.getAbsolutePath());
 			}
 			
 		}
 		
-		System.out.println("Once created paths list of size----> " + paths.size());
+		LOG.trace("Once created paths list of size----> " + paths.size());
 
 		for (int j = 0; j < nbAllOcc; j++) {
 			final Occurrence occ = allOccurrences[j];
@@ -155,37 +158,37 @@ public class ExampleSensor implements Sensor {
 				}
 
 				String rawClassName = new String(solutionComponent.getValue());
-				System.out.println("Infected class detected by ptidej ---> " + rawClassName);
+				LOG.debug("Infected class detected by ptidej ---> " + rawClassName);
 				// w.println(solutionComponent.getValue());
 
 				String className = rawClassName.substring(rawClassName.lastIndexOf(".") + 1).trim();
-				System.out.println("Simply the className ripped from the ptidej result ---> " + className);
+				LOG.debug("Simply the className ripped from the ptidej result ---> " + className);
 
 				for (String clNamePath : paths) {
 				
-					System.out.println("If not found back scanning paths with size --->" + paths.size());
+					LOG.debug("If not found back scanning paths with size --->" + paths.size());
 					
 					//for Windows systems 
 					//String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf("\\") + 1).trim();
 					
 					String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf("/")+1).trim();
-					System.out.println("Class for which a match has to be found (still with extension) ---> "
+					LOG.debug("Class for which a match has to be found (still with extension) ---> "
 							+ clNameAndExtension);
 					String[] parts = clNameAndExtension.split("\\.");
 					String clName = parts[0];
-					System.out.println("Class for which a match has to be found(w/o extension) ---> " + clName);
-					System.out.println("comparing: "+ clName + " and " + className);
+					LOG.debug("Class for which a match has to be found(w/o extension) ---> " + clName);
+					LOG.debug("comparing: "+ clName + " and " + className);
 					if (clName.equals(className)) {
-						System.out.println(
+						LOG.debug(
 								"For this class (absolute path path) an issue must be added ---> " + clNamePath);
 						InputFile file = fs.inputFile(fs.predicates().hasAbsolutePath((clNamePath)));
 						if (file != null) {
-							System.out.println("Input file from absolutePath is not null");
+							LOG.debug("Input file from absolutePath is not null");
 						}
 						// Resource r = context.getResource(file);
 						Issuable issuable = perspectives.as(Issuable.class, file);
 						if (issuable != null) {
-							System.out.println("Input file from absolutePath is also issuable");
+							LOG.debug("Input file from absolutePath is also issuable");
 							switch (codesmellName) {
 							case "ComplexClass":
 								Issue issue = issuable.newIssueBuilder()
@@ -334,9 +337,7 @@ public class ExampleSensor implements Sensor {
 			final String[] someSourceRootPaths, final String[] someSourceFilePaths, final String aName,
 			final String anOutputDirectoryName) {
 
-		System.out.print("Analysing ");
-		System.out.print(aName);
-		System.out.println("...");
+		LOG.debug("Analysing "+aName);
 
 		// Output.getInstance().setNormalOutput(new PrintWriter(System.out));
 		// Output.getInstance().setDebugOutput(new PrintWriter(System.out));
@@ -349,12 +350,8 @@ public class ExampleSensor implements Sensor {
 			final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel(aName);
 			codeLevelModel.create(creator);
 			final long endTime = System.currentTimeMillis();
-			System.out.print("Model built in ");
-			System.out.print(endTime - startTime);
-			System.out.println(" ms.");
-			System.out.print("Model contains ");
-			System.out.print(codeLevelModel.getNumberOfTopLevelEntities());
-			System.out.println(" top-level entities.");
+			LOG.info("Model built in "+ (endTime - startTime)+" ms.");
+			LOG.info("Model contains "+codeLevelModel.getNumberOfTopLevelEntities()+ " top-level entities.");
 
 			// try {
 			final padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator annotator2 = new padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator(
@@ -420,14 +417,7 @@ public class ExampleSensor implements Sensor {
 				final OccurrenceBuilder solutionBuilder = OccurrenceBuilder.getInstance();
 				final Occurrence[] solutions = solutionBuilder.getCanonicalOccurrences(properties);
 
-				System.out.print(solutions.length);
-				System.out.print(" solutions for ");
-				System.out.print(antipatternName);
-				System.out.print(" in ");
-				System.out.print(aName);
-				System.out.print(" in ");
-				System.out.print(System.currentTimeMillis() - startTime);
-				System.out.println(" ms.");
+				LOG.debug(solutions.length+" solutions for "+ antipatternName+" in "+aName+" in "+(System.currentTimeMillis() - startTime)+" ms.");
 
 				extractClassesDefects(anOutputDirectory, aName, null, antipatternName, properties, solutionBuilder);
 			}
