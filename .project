@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <projectDescription>
-	<name>Sonar_extension</name>
+	<name>Sonarqube Code Smells - AntiPatterns plugin</name>
 	<comment></comment>
 	<projects>
 	</projects>
