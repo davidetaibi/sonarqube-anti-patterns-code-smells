@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.unibz.sonarqube_extension</groupId>
   <artifactId>CodeSmellsAntiPatterns</artifactId>
-  <version>0.0.2</version>
+  <version>0.3</version>
   <packaging>sonar-plugin</packaging>
   <name>Code Smells and Anti Patterns detection</name>
   <description>A plugin for analysing code smells and antipatterns through the ptidej library</description>
@@ -315,7 +315,7 @@
 				<configuration>
 					<pluginClass>it.unibz.sonarqube_plugin.CodeSmellsAntiPatternsPlugin</pluginClass>
 					<pluginKey>CodeSmellsAntiPatterns</pluginKey>
-                    <finalName>CodeSmellsAntiPatterns-0.2</finalName>
+                    <finalName>CodeSmellsAntiPatterns-${project.version}</finalName>
 				</configuration>
 			</plugin>
 

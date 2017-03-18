@@ -1,34 +1,30 @@
 package it.unibz.sonarqube_plugin;
 
 import java.io.File;
-import java.io.IOException;
 import java.io.PrintWriter;
 import java.util.ArrayList;
 import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.DependsUpon;
 import org.sonar.api.batch.Sensor;
 import org.sonar.api.batch.SensorContext;
 import org.sonar.api.batch.fs.FileSystem;
 import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.batch.measure.Metric;
 import org.sonar.api.component.ResourcePerspectives;
 import org.sonar.api.config.Settings;
 import org.sonar.api.issue.Issuable;
 import org.sonar.api.issue.Issue;
-import org.sonar.api.measures.CoreMetrics;
 
 import org.sonar.api.resources.Project;
-import org.sonar.api.resources.Resource;
 import org.sonar.api.rule.RuleKey;
 import org.sonar.api.batch.fs.FilePredicate;
 import org.sonar.api.batch.fs.FilePredicates;
 
+import padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator;
+import padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator;
 import padl.kernel.IAbstractLevelModel;
 import padl.kernel.ICodeLevelModel;
-import padl.kernel.IIdiomLevelModel;
 import padl.kernel.exception.CreationException;
 import padl.kernel.impl.Factory;
 import ptidej.solver.Occurrence;
@@ -45,7 +41,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 	private Settings settings;
 	private final FileSystem fs;
-	Logger LOG = LoggerFactory.getLogger(getClass());
+	private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsSensor.class);
 	private final ResourcePerspectives perspectives;
 	SensorContext context = null;
 
@@ -65,8 +61,6 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 	public void analyse(Project project, SensorContext sensorContext) {
 		context = sensorContext;
-		String projectName = project.getName();
-		String date = project.getAnalysisDate().toString();
 
 		String[] SMELLS = new String[] { "AntiSingleton",
 				"BaseClassKnowsDerivedClass", "BaseClassShouldBeAbstract", "Blob",
@@ -77,7 +71,12 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 				"SpeculativeGenerality", "SwissArmyKnife", "TraditionBreaker" };
 		
 		String rootFolder = settings.getString("sonar.projectBaseDir");
-		LOG.debug("BaseDir----->" + rootFolder);
+		LOG.debug("BaseDir------->" + rootFolder);
+        //TODO: Analyze only sources specified by sonar.sources, sonar.modules
+        //https://docs.sonarqube.org/display/SCAN/Advanced+SonarQube+Scanner+Usages
+		//rootFolder = settings.getString("sonar.sources");???
+        //LOG.debug("AnalysisDir--->" + rootFolder);
+
 
 		String[] root_paths = new String[] { rootFolder };
 		String[] source_paths = new String[] { rootFolder };
@@ -86,47 +85,13 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 	}
 
-	/*public static void extractFilesFromDir(final String aPath, final String anExtension,
-			final ArrayList<String> aListOfFiles)
-			//removed static
-			*/
-	public void extractFilesFromDir(final String aPath, final String anExtension,
-			final ArrayList<String> aListOfFiles) {
+	public void extractClassesDefects(final String codesmellName,
+									  final Properties properties,
+									  final OccurrenceBuilder solutionBuilder) {
 
-		final File pathFile = new File(aPath);
-		final String[] subPaths = pathFile.list();
-		if (subPaths != null) {
-			for (int i = 0; i < subPaths.length; i++) {
-				final String fileName = aPath + '/' + subPaths[i];
-				final File file = new File(fileName);
-				if (file.isDirectory()) {
-					extractFilesFromDir(fileName, anExtension, aListOfFiles);
-				} else {
-					if (// fileName.indexOf("org.eclipse.") > 0 &&
-					fileName.endsWith(anExtension)) {
-						LOG.trace(fileName);
-						aListOfFiles.add(fileName);
-					}
-				}
-			}
-		} else {
-			throw new RuntimeException(new CreationException("No subdirectories with JAR files in " + aPath));
-		}
-	}
-
-	public void extractClassesDefects(final String anOutputDirectory, final String aName,
-			final IIdiomLevelModel idiomLevelModel, final String codesmellName, final Properties properties,
-			final OccurrenceBuilder solutionBuilder) throws IOException {
-
-		final String path2 = anOutputDirectory + "Classes Detected in " + aName + " for " + codesmellName + ".csv";
-		/*
-		 * final PrintWriter w = new
-		 * PrintWriter(ProxyDisk.getInstance().fileTempOutput(path2));
-		 */
 
 		final Occurrence[] allOccurrences = solutionBuilder.getAllOccurrences(properties);
-		final int nbAllOcc = allOccurrences.length;
-		LOG.debug("How many classes infected by --> " + codesmellName + " ----> " + nbAllOcc);
+		LOG.debug("How many classes infected by --> " + codesmellName + " ----> " + allOccurrences.length);
 
 		FilePredicates f = this.fs.predicates();
 		FilePredicate fp = f.all();
@@ -144,204 +109,194 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 		
 		LOG.trace("Once created paths list of size----> " + paths.size());
 
-		for (int j = 0; j < nbAllOcc; j++) {
-			final Occurrence occ = allOccurrences[j];
-			@SuppressWarnings("unchecked")
-			final ArrayList<OccurrenceComponent> listOccComponents = (ArrayList<OccurrenceComponent>) occ
-					.getComponents();
-			if (!listOccComponents.isEmpty()) {
-				final OccurrenceComponent solutionComponent;	
-				if(codesmellName.matches("AntiSingleton|RefusedParentBequest")) {	
-					solutionComponent = (OccurrenceComponent) listOccComponents.get(1);
-				}else { 
-					solutionComponent = (OccurrenceComponent) listOccComponents.get(0);
-				}
+        for (final Occurrence occ : allOccurrences) {
+            @SuppressWarnings("unchecked")
+            final ArrayList<OccurrenceComponent> listOccComponents =
+                    (ArrayList<OccurrenceComponent>) occ.getComponents();
+            if (!listOccComponents.isEmpty()) {
+                final OccurrenceComponent solutionComponent;
+                if (codesmellName.matches("AntiSingleton|RefusedParentBequest")) {
+                    solutionComponent = listOccComponents.get(1);
+                } else {
+                    solutionComponent = listOccComponents.get(0);
+                }
 
-				String rawClassName = new String(solutionComponent.getValue());
-				LOG.debug("Infected class detected by ptidej ---> " + rawClassName);
-				// w.println(solutionComponent.getValue());
+                String rawClassName = new String(solutionComponent.getValue());
+                LOG.debug("Infected class detected by ptidej ---> " + rawClassName);
 
-				String className = rawClassName.substring(rawClassName.lastIndexOf(".") + 1).trim();
-				LOG.debug("Simply the className ripped from the ptidej result ---> " + className);
+                String className = rawClassName.substring(rawClassName.lastIndexOf(".") + 1).trim();
+                LOG.debug("Simply the className ripped from the ptidej result ---> " + className);
 
-				for (String clNamePath : paths) {
-				
-					LOG.debug("If not found back scanning paths with size --->" + paths.size());
-					
-					//for Windows systems 
-					//String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf("\\") + 1).trim();
-					
-					String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf("/")+1).trim();
-					LOG.debug("Class for which a match has to be found (still with extension) ---> "
-							+ clNameAndExtension);
-					String[] parts = clNameAndExtension.split("\\.");
-					String clName = parts[0];
-					LOG.debug("Class for which a match has to be found(w/o extension) ---> " + clName);
-					LOG.debug("comparing: "+ clName + " and " + className);
-					if (clName.equals(className)) {
-						LOG.debug(
-								"For this class (absolute path path) an issue must be added ---> " + clNamePath);
-						InputFile file = fs.inputFile(fs.predicates().hasAbsolutePath((clNamePath)));
-						if (file != null) {
-							LOG.debug("Input file from absolutePath is not null");
-						}
-						// Resource r = context.getResource(file);
-						Issuable issuable = perspectives.as(Issuable.class, file);
-						if (issuable != null) {
-							LOG.debug("Input file from absolutePath is also issuable");
-							switch (codesmellName) {
-							case "ComplexClass":
-								Issue issue = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "complex_class")).line(10)
-										.message("Complex class").build();
-								issuable.addIssue(issue);
-								break;
+                for (String clNamePath : paths) {
 
-							case "Blob":
-								Issue issue2 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "blob_class")).line(10).message("Blob class")
-										.build();
-								issuable.addIssue(issue2);
-								break;
+                    LOG.debug("If not found back scanning paths with size --->" + paths.size());
 
-							case "ClassDataShouldBePrivate":
-								Issue issue3 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "class_data_private")).line(10)
-										.message("Class Data Should Be Private").build();
-								issuable.addIssue(issue3);
-								break;
+                    //for Windows systems
+                    String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf("\\") + 1).trim();
 
-							case "FunctionalDecomposition":
-								Issue issue4 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "functional_decomposition")).line(10)
-										.message("Functional Decomposition").build();
-								issuable.addIssue(issue4);
-								break;
+                    //String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf("/") + 1).trim();
+                    LOG.debug("Class for which a match has to be found (still with extension) ---> " + clNameAndExtension);
+                    String[] parts = clNameAndExtension.split("\\.");
+                    String clName = parts[0];
+                    LOG.debug("Class for which a match has to be found(w/o extension) ---> " + clName);
+                    LOG.debug("comparing: " + clName + " and " + className);
+                    if (clName.equals(className)) {
+                        LOG.debug("For this class (absolute path path) an issue must be added ---> " + clNamePath);
+                        InputFile file = fs.inputFile(fs.predicates().hasAbsolutePath(clNamePath));
+                        if (file != null) {
+                            LOG.debug("Input file from absolutePath is not null");
+                        }
+                        // Resource r = context.getResource(file);
+                        Issuable issuable = perspectives.as(Issuable.class, file);
+                        if (issuable != null) {
+                            LOG.debug("Input file from absolutePath is also issuable");
+                            switch (codesmellName) {
+                                case "ComplexClass":
+                                    Issue issue = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "complex_class")).line(10)
+                                            .message("Complex class").build();
+                                    issuable.addIssue(issue);
+                                    break;
 
-							case "SpaghettiCode":
-								Issue issue5 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "spaghetti_code")).line(10)
-										.message("Spaghetti Code").build();
-								issuable.addIssue(issue5);
-								break;
-							
-							case "AntiSingleton":
-								Issue issue6 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "antisingleton")).line(10)
-										.message("AntiSingleton").build();
-								issuable.addIssue(issue6);
-								break;	
-							
-							case "BaseClassKnowsDerivedClass":
-								Issue issue7 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "baseclass_knows_derived")).line(10)
-										.message("BaseClass Knows Derived Class").build();
-								issuable.addIssue(issue7);
-								break;
-							
-							case "BaseClassShouldBeAbstract":
-								Issue issue8 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "baseclass_abstract")).line(10)
-										.message("Base Class Should Be Abstract").build();
-								issuable.addIssue(issue8);
-								break;
-							
-							case "LargeClass":
-								Issue issue9 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "large_class")).line(10)
-										.message("Large Class").build();
-								issuable.addIssue(issue9);
-								break;
-							
-							case "LazyClass":
-								Issue issue10 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "lazy_class")).line(10)
-										.message("Lazy Class").build();
-								issuable.addIssue(issue10);
-								break;
-							
-							case "LongMethod":
-								Issue issue11 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "long_method")).line(10)
-										.message("Long Method").build();
-								issuable.addIssue(issue11);
-								break;
-							
-							case "LongParameterList":
-								Issue issue12 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "long_parameter_list")).line(10)
-										.message("Long Parameter List").build();
-								issuable.addIssue(issue12);
-								break;
-							
-							case "ManyFieldAttributesButNotComplex":
-								Issue issue13 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "many_field_attributes_not_complex")).line(10)
-										.message("Many Field Attributes But Not Complex").build();
-								issuable.addIssue(issue13);
-								break;
-							
-							case "MessageChains":
-								Issue issue14 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "message_chains")).line(10)
-										.message("Message Chains").build();
-								issuable.addIssue(issue14);
-								break;
-							
-							case "RefusedParentBequest":
-								Issue issue15 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "refused_parent_bequest")).line(10)
-										.message("Refused Parent Bequest").build();
-								issuable.addIssue(issue15);
-								break;
-							
-							case "SpeculativeGenerality":
-								Issue issue16 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "speculative_generality")).line(10)
-										.message("Speculative Generality").build();
-								issuable.addIssue(issue16);
-								break;
-							
-							case "SwissArmyKnife":
-								Issue issue17 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "swiss_army_knife")).line(10)
-										.message("Swiss Army Knife").build();
-								issuable.addIssue(issue17);
-								break;
-							
-							case "TraditionBreaker":
-								Issue issue18 = issuable.newIssueBuilder()
-										.ruleKey(RuleKey.of("code_smells", "tradition_breaker")).line(10)
-										.message("Tradition Breaker").build();
-								issuable.addIssue(issue18);
-								break;	
-							}
-							
-							
+                                case "Blob":
+                                    Issue issue2 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "blob_class")).line(10).message("Blob class")
+                                            .build();
+                                    issuable.addIssue(issue2);
+                                    break;
 
-						}
-						paths.remove(clNamePath);
-						break;
-					}
+                                case "ClassDataShouldBePrivate":
+                                    Issue issue3 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "class_data_private")).line(10)
+                                            .message("Class Data Should Be Private").build();
+                                    issuable.addIssue(issue3);
+                                    break;
 
-				
-			
-				}
-				}
+                                case "FunctionalDecomposition":
+                                    Issue issue4 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "functional_decomposition")).line(10)
+                                            .message("Functional Decomposition").build();
+                                    issuable.addIssue(issue4);
+                                    break;
 
-		}
-		// w.close();
+                                case "SpaghettiCode":
+                                    Issue issue5 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "spaghetti_code")).line(10)
+                                            .message("Spaghetti Code").build();
+                                    issuable.addIssue(issue5);
+                                    break;
+
+                                case "AntiSingleton":
+                                    Issue issue6 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "antisingleton")).line(10)
+                                            .message("AntiSingleton").build();
+                                    issuable.addIssue(issue6);
+                                    break;
+
+                                case "BaseClassKnowsDerivedClass":
+                                    Issue issue7 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "baseclass_knows_derived")).line(10)
+                                            .message("BaseClass Knows Derived Class").build();
+                                    issuable.addIssue(issue7);
+                                    break;
+
+                                case "BaseClassShouldBeAbstract":
+                                    Issue issue8 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "baseclass_abstract")).line(10)
+                                            .message("Base Class Should Be Abstract").build();
+                                    issuable.addIssue(issue8);
+                                    break;
+
+                                case "LargeClass":
+                                    Issue issue9 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "large_class")).line(10)
+                                            .message("Large Class").build();
+                                    issuable.addIssue(issue9);
+                                    break;
+
+                                case "LazyClass":
+                                    Issue issue10 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "lazy_class")).line(10)
+                                            .message("Lazy Class").build();
+                                    issuable.addIssue(issue10);
+                                    break;
+
+                                case "LongMethod":
+                                    Issue issue11 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "long_method")).line(10)
+                                            .message("Long Method").build();
+                                    issuable.addIssue(issue11);
+                                    break;
+
+                                case "LongParameterList":
+                                    Issue issue12 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "long_parameter_list")).line(10)
+                                            .message("Long Parameter List").build();
+                                    issuable.addIssue(issue12);
+                                    break;
+
+                                case "ManyFieldAttributesButNotComplex":
+                                    Issue issue13 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "many_field_attributes_not_complex")).line(10)
+                                            .message("Many Field Attributes But Not Complex").build();
+                                    issuable.addIssue(issue13);
+                                    break;
+
+                                case "MessageChains":
+                                    Issue issue14 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "message_chains")).line(10)
+                                            .message("Message Chains").build();
+                                    issuable.addIssue(issue14);
+                                    break;
+
+                                case "RefusedParentBequest":
+                                    Issue issue15 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "refused_parent_bequest")).line(10)
+                                            .message("Refused Parent Bequest").build();
+                                    issuable.addIssue(issue15);
+                                    break;
+
+                                case "SpeculativeGenerality":
+                                    Issue issue16 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "speculative_generality")).line(10)
+                                            .message("Speculative Generality").build();
+                                    issuable.addIssue(issue16);
+                                    break;
+
+                                case "SwissArmyKnife":
+                                    Issue issue17 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "swiss_army_knife")).line(10)
+                                            .message("Swiss Army Knife").build();
+                                    issuable.addIssue(issue17);
+                                    break;
+
+                                case "TraditionBreaker":
+                                    Issue issue18 = issuable.newIssueBuilder()
+                                            .ruleKey(RuleKey.of("code_smells", "tradition_breaker")).line(10)
+                                            .message("Tradition Breaker").build();
+                                    issuable.addIssue(issue18);
+                                    break;
+                            }
+
+
+                        }
+                        paths.remove(clNamePath);
+                        break;
+                    }
+
+
+                }
+            }
+
+        }
 	}
 
-	public final void analyseCodeLevelModelFromJavaSourceFilesEclipse(final String[] someSmells,
-			final String[] someSourceRootPaths, final String[] someSourceFilePaths, final String aName,
+	public final void analyseCodeLevelModelFromJavaSourceFilesEclipse(
+	        final String[] someSmells,
+			final String[] someSourceRootPaths,
+            final String[] someSourceFilePaths,
+            final String aName,
 			final String anOutputDirectoryName) {
-
-		LOG.debug("Analysing "+aName);
-
-		// Output.getInstance().setNormalOutput(new PrintWriter(System.out));
-		// Output.getInstance().setDebugOutput(new PrintWriter(System.out));
-		// Output.getInstance().setErrorOutput(new PrintWriter(System.err));
 
 		try {
 			final long startTime = System.currentTimeMillis();
@@ -350,12 +305,11 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 			final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel(aName);
 			codeLevelModel.create(creator);
 			final long endTime = System.currentTimeMillis();
-			LOG.debug("Model built in "+ (endTime - startTime)+" ms.");
-			LOG.debug("Model contains "+codeLevelModel.getNumberOfTopLevelEntities()+ " top-level entities.");
+			LOG.info("Code level model built in "+ (endTime - startTime)+" ms.");
+			LOG.info("Code level model contains "+codeLevelModel.getNumberOfTopLevelEntities()+ " top-level entities.");
 
 			// try {
-			final padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator annotator2 = new padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator(
-					codeLevelModel);
+			final LOCModelAnnotator annotator2 = new LOCModelAnnotator(codeLevelModel);
 			creator.applyAnnotator(annotator2);
 			// }
 			// catch (final UnsupportedSourceModelException e) {
@@ -363,8 +317,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 			// }
 
 			// try {
-			final padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator annotator1 = new padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator(
-					codeLevelModel);
+			final ConditionalModelAnnotator annotator1 = new ConditionalModelAnnotator(codeLevelModel);
 			creator.applyAnnotator(annotator1);
 			// }
 			// catch (final UnsupportedSourceModelException e) {
@@ -394,13 +347,13 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 		// }
 	}
 
-	public final void analyseCodeLevelModel(final String[] someSmells, final String aName,
-			final IAbstractLevelModel idiomLevelModel, final String anOutputDirectory) {
+	public final void analyseCodeLevelModel(final String[] someSmells,
+                                            final String aName,
+                                            final IAbstractLevelModel idiomLevelModel,
+                                            final String anOutputDirectory) {
 
 		try {
-			for (int i = 0; i < someSmells.length; i++) {
-				final String antipatternName = someSmells[i];
-
+			for (final String antipatternName : someSmells) {
 				final long startTime = System.currentTimeMillis();
 				final Class<?> detectionClass = Class.forName("sad.designsmell.detection.repository." + antipatternName
 						+ '.' + antipatternName + "Detection");
@@ -419,7 +372,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 				LOG.debug(solutions.length+" solutions for "+ antipatternName+" in "+aName+" in "+(System.currentTimeMillis() - startTime)+" ms.");
 
-				extractClassesDefects(anOutputDirectory, aName, null, antipatternName, properties, solutionBuilder);
+				extractClassesDefects(antipatternName, properties, solutionBuilder);
 			}
 		} catch (final Exception e) {
 			e.printStackTrace(ProxyConsole.getInstance().errorOutput());

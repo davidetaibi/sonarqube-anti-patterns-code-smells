@@ -1,16 +1,19 @@
 package it.unibz.sonarqube_plugin;
 
-import org.sonar.api.rule.RuleStatus;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.sonar.api.rule.Severity;
 import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
 
 public class MyCodeSmellsDefinition implements RulesDefinition {
 
+	private static Logger LOG = LoggerFactory.getLogger(MyCodeSmellsDefinition.class);
+
 	   @Override
 	   public void define(Context context) {
 		   
-		 System.out.println("define method from MyCodeSmellsDefinition started");
+		 LOG.debug("define method from MyCodeSmellsDefinition started");
 	     NewRepository repository = context.createRepository("code_smells", "java").setName("Code-smell rules repository");
 
 	  
@@ -290,6 +293,6 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
 
 	     // don't forget to call done() to finalize the definition
 	     repository.done();
-	     System.out.println("define method from MyCodeSmellsDefinition stopped");
+	     LOG.debug("define method from MyCodeSmellsDefinition stopped");
 	   }
 	 }
