@@ -69,17 +69,24 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 				"LongParameterList", "ManyFieldAttributesButNotComplex",
 				"MessageChains", "RefusedParentBequest", "SpaghettiCode",
 				"SpeculativeGenerality", "SwissArmyKnife", "TraditionBreaker" };
-		
-		String rootFolder = settings.getString("sonar.projectBaseDir");
-		LOG.debug("BaseDir------->" + rootFolder);
-        //TODO: Analyze only sources specified by sonar.sources, sonar.modules
+
+        //TODO: Analyze only sources specified by sonar.sources
         //https://docs.sonarqube.org/display/SCAN/Advanced+SonarQube+Scanner+Usages
-		//rootFolder = settings.getString("sonar.sources");???
-        //LOG.debug("AnalysisDir--->" + rootFolder);
-
-
-		String[] root_paths = new String[] { rootFolder };
-		String[] source_paths = new String[] { rootFolder };
+		String sonarBaseDir = settings.getString("sonar.projectBaseDir");
+        String sonarSources = settings.getString("sonar.sources");
+        String sonarModules = settings.getString("sonar.modules");
+        LOG.debug("BaseDir " + sonarBaseDir); // if project has modules, this is already the module dir
+        LOG.debug("Sources " + sonarSources);
+        LOG.debug("Modules " + sonarModules);
+        // padl model is built for the project base directory
+        // if a single source folder is specified, padl module is built just for it
+        String padlRootFolder = sonarBaseDir;
+        if (!sonarSources.contains(","))
+            padlRootFolder = sonarSources;
+        LOG.info("PadlModuleDir " + padlRootFolder);
+        
+		String[] root_paths = new String[] { padlRootFolder };
+		String[] source_paths = new String[] { padlRootFolder };
 
 		analyseCodeLevelModelFromJavaSourceFilesEclipse(SMELLS, root_paths, source_paths, "Test", ".");
 
@@ -107,7 +114,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 			
 		}
 		
-		LOG.trace("Once created paths list of size----> " + paths.size());
+		LOG.debug("Once created paths list of size----> " + paths.size());
 
         for (final Occurrence occ : allOccurrences) {
             @SuppressWarnings("unchecked")
