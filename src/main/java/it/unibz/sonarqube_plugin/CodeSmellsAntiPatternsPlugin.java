@@ -1,20 +1,16 @@
 package it.unibz.sonarqube_plugin;
 
-import java.util.Arrays;
-import java.util.List;
-import org.sonar.api.SonarPlugin;
+import org.sonar.api.Plugin;
 
 
 
-public class CodeSmellsAntiPatternsPlugin extends SonarPlugin {
-	
-	public CodeSmellsAntiPatternsPlugin() { 
-		super();
-	}
+public class CodeSmellsAntiPatternsPlugin implements Plugin {
 
-	
-	public List getExtensions() {
-		return Arrays.asList(MyCodeSmellsDefinition.class,CodeSmellsAntiPatternsSensor.class);
-	}
-
+    @Override
+    public void define(Context context) {
+        context.addExtensions(
+                MyCodeSmellsDefinition.class,
+                CodeSmellsAntiPatternsSensor.class
+        );
+    }
 }

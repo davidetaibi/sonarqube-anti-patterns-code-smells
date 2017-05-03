@@ -4,18 +4,18 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.unibz.sonarqube_extension</groupId>
   <artifactId>CodeSmellsAntiPatterns</artifactId>
-  <version>0.3</version>
-  <packaging>sonar-plugin</packaging>
+  <version>0.4</version>
   <name>Code Smells and Anti Patterns detection</name>
   <description>A plugin for analysing code smells and antipatterns through the ptidej library</description>
-  
-  
-  
   <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>
   <inceptionYear>2016</inceptionYear>
 
-
-
+    <packaging>sonar-plugin</packaging>
+    <properties>
+        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <sonar.apiVersion>6.3</sonar.apiVersion>
+        <jdk.min.version>1.8</jdk.min.version>
+    </properties>
 
 
   <organization>
@@ -82,13 +82,25 @@
     </repositories>
   
   <dependencies>
-  	
-  	<dependency>
-		<groupId>org.codehaus.sonar</groupId>
-		<artifactId>sonar-plugin-api</artifactId>
-		<version>5.0.1</version>
-		<scope>provided</scope>
-	</dependency>
+
+      <dependency>
+          <groupId>org.sonarsource.sonarqube</groupId>
+          <artifactId>sonar-plugin-api</artifactId>
+          <version>${sonar.apiVersion}</version><!-- minimal version of SonarQube to support. -->
+          <scope>provided</scope>
+      </dependency>
+
+      <dependency>
+          <groupId>commons-lang</groupId>
+          <artifactId>commons-lang</artifactId>
+          <version>2.6</version>
+      </dependency>
+      
+      <dependency>
+          <groupId>org.slf4j</groupId>
+          <artifactId>slf4j-api</artifactId>
+          <version>1.7.21</version>
+      </dependency>
   	
   	<dependency>
          <groupId>padl-analyses</groupId>
@@ -310,11 +322,12 @@
 			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
-				<version>1.15</version>
+				<version>1.17</version>
 				<extensions>true</extensions>
 				<configuration>
 					<pluginClass>it.unibz.sonarqube_plugin.CodeSmellsAntiPatternsPlugin</pluginClass>
 					<pluginKey>CodeSmellsAntiPatterns</pluginKey>
+                    <pluginName>${project.name}</pluginName>
                     <finalName>CodeSmellsAntiPatterns-${project.version}</finalName>
 				</configuration>
 			</plugin>
@@ -322,13 +335,26 @@
 			<plugin>
 				<groupId>org.apache.maven.plugins</groupId>
 				<artifactId>maven-compiler-plugin</artifactId>
-				<version>3.1</version>
-				<configuration>
-					<source>1.7</source>
-					<target>1.7</target>
-				</configuration>
+				<version>3.6.1</version>
+                <configuration>
+                    <source>${jdk.min.version}</source>
+                    <target>${jdk.min.version}</target>
+                </configuration>
 			</plugin>
 
+            <plugin>
+                <!-- UTF-8 bundles are not supported by Java, so they must be converted during build -->
+                <groupId>org.codehaus.mojo</groupId>
+                <artifactId>native2ascii-maven-plugin</artifactId>
+                <version>1.0-beta-1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>native2ascii</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
 
 		</plugins>
 	</build>

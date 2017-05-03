@@ -7,19 +7,12 @@ import java.util.Properties;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
-import org.sonar.api.batch.Sensor;
-import org.sonar.api.batch.SensorContext;
-import org.sonar.api.batch.fs.FileSystem;
-import org.sonar.api.batch.fs.InputFile;
-import org.sonar.api.component.ResourcePerspectives;
-import org.sonar.api.config.Settings;
-import org.sonar.api.issue.Issuable;
-import org.sonar.api.issue.Issue;
-
-import org.sonar.api.resources.Project;
-import org.sonar.api.rule.RuleKey;
-import org.sonar.api.batch.fs.FilePredicate;
-import org.sonar.api.batch.fs.FilePredicates;
+import org.sonar.api.batch.fs.*;
+import org.sonar.api.batch.sensor.Sensor;
+import org.sonar.api.batch.sensor.SensorContext;
+import org.sonar.api.batch.sensor.SensorDescriptor;
+import org.sonar.api.batch.sensor.issue.NewIssue;
+import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 
 import padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator;
 import padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator;
@@ -39,28 +32,21 @@ import util.io.ReaderInputStream;
 
 public class CodeSmellsAntiPatternsSensor implements Sensor {
 
-	private Settings settings;
-	private final FileSystem fs;
 	private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsSensor.class);
-	private final ResourcePerspectives perspectives;
-	SensorContext context = null;
+    private FileSystem fs;
+    private SensorContext context;
 
-	/**
-	 * Use of IoC to get Settings
-	 */
-	public CodeSmellsAntiPatternsSensor(Settings settings, FileSystem fs, ResourcePerspectives p) {
-		this.settings = settings;
-		this.fs = fs;
-		this.perspectives = p;
-	}
 
-	public boolean shouldExecuteOnProject(Project project) {
-		// This sensor is executed on any type of projects
-		return true;
-	}
+    @Override
+    public void describe(SensorDescriptor sensorDescriptor) {
+        // Shows at start of analysis
+        //LOG.debug("-------------------------> Sensor descriptor");
+    }
 
-	public void analyse(Project project, SensorContext sensorContext) {
+    @Override
+    public void execute(SensorContext sensorContext) {
 		context = sensorContext;
+		fs = context.fileSystem();
 
 		String[] SMELLS = new String[] { "AntiSingleton",
 				"BaseClassKnowsDerivedClass", "BaseClassShouldBeAbstract", "Blob",
@@ -72,9 +58,9 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
         //TODO: Analyze only sources specified by sonar.sources
         //https://docs.sonarqube.org/display/SCAN/Advanced+SonarQube+Scanner+Usages
-		String sonarBaseDir = settings.getString("sonar.projectBaseDir");
-        String sonarSources = settings.getString("sonar.sources");
-        String sonarModules = settings.getString("sonar.modules");
+		String sonarBaseDir = context.settings().getString("sonar.projectBaseDir");
+        String sonarSources = context.settings().getString("sonar.sources");
+        String sonarModules = context.settings().getString("sonar.modules");
         LOG.debug("BaseDir " + sonarBaseDir); // if project has modules, this is already the module dir
         LOG.debug("Sources " + sonarSources);
         LOG.debug("Modules " + sonarModules);
@@ -84,7 +70,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         if (!sonarSources.contains(","))
             padlRootFolder = sonarSources;
         LOG.info("PadlModuleDir " + padlRootFolder);
-        
+
 		String[] root_paths = new String[] { padlRootFolder };
 		String[] source_paths = new String[] { padlRootFolder };
 
@@ -92,7 +78,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 	}
 
-	public void extractClassesDefects(final String codesmellName,
+	private void extractClassesDefects(final String codesmellName,
 									  final Properties properties,
 									  final OccurrenceBuilder solutionBuilder) {
 
@@ -153,139 +139,191 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                         if (file != null) {
                             LOG.debug("Input file from absolutePath is not null");
                         }
-                        // Resource r = context.getResource(file);
-                        Issuable issuable = perspectives.as(Issuable.class, file);
-                        if (issuable != null) {
-                            LOG.debug("Input file from absolutePath is also issuable");
-                            switch (codesmellName) {
-                                case "ComplexClass":
-                                    Issue issue = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "complex_class")).line(10)
-                                            .message("Complex class").build();
-                                    issuable.addIssue(issue);
-                                    break;
 
-                                case "Blob":
-                                    Issue issue2 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "blob_class")).line(10).message("Blob class")
-                                            .build();
-                                    issuable.addIssue(issue2);
-                                    break;
+                        NewIssue newIssue;
+                        NewIssueLocation primaryLocation;
+                        switch (codesmellName) {
+                            case "ComplexClass":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.COMPLEX_CLASS);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Complex class");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "Blob":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.BLOB_CLASS);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Blob class");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "ClassDataShouldBePrivate":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.CLASS_DATA_PRIVATE);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Class data should be private");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
 
-                                case "ClassDataShouldBePrivate":
-                                    Issue issue3 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "class_data_private")).line(10)
-                                            .message("Class Data Should Be Private").build();
-                                    issuable.addIssue(issue3);
-                                    break;
-
-                                case "FunctionalDecomposition":
-                                    Issue issue4 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "functional_decomposition")).line(10)
-                                            .message("Functional Decomposition").build();
-                                    issuable.addIssue(issue4);
-                                    break;
-
-                                case "SpaghettiCode":
-                                    Issue issue5 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "spaghetti_code")).line(10)
-                                            .message("Spaghetti Code").build();
-                                    issuable.addIssue(issue5);
-                                    break;
-
-                                case "AntiSingleton":
-                                    Issue issue6 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "antisingleton")).line(10)
-                                            .message("AntiSingleton").build();
-                                    issuable.addIssue(issue6);
-                                    break;
-
-                                case "BaseClassKnowsDerivedClass":
-                                    Issue issue7 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "baseclass_knows_derived")).line(10)
-                                            .message("BaseClass Knows Derived Class").build();
-                                    issuable.addIssue(issue7);
-                                    break;
-
-                                case "BaseClassShouldBeAbstract":
-                                    Issue issue8 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "baseclass_abstract")).line(10)
-                                            .message("Base Class Should Be Abstract").build();
-                                    issuable.addIssue(issue8);
-                                    break;
-
-                                case "LargeClass":
-                                    Issue issue9 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "large_class")).line(10)
-                                            .message("Large Class").build();
-                                    issuable.addIssue(issue9);
-                                    break;
-
-                                case "LazyClass":
-                                    Issue issue10 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "lazy_class")).line(10)
-                                            .message("Lazy Class").build();
-                                    issuable.addIssue(issue10);
-                                    break;
-
-                                case "LongMethod":
-                                    Issue issue11 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "long_method")).line(10)
-                                            .message("Long Method").build();
-                                    issuable.addIssue(issue11);
-                                    break;
-
-                                case "LongParameterList":
-                                    Issue issue12 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "long_parameter_list")).line(10)
-                                            .message("Long Parameter List").build();
-                                    issuable.addIssue(issue12);
-                                    break;
-
-                                case "ManyFieldAttributesButNotComplex":
-                                    Issue issue13 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "many_field_attributes_not_complex")).line(10)
-                                            .message("Many Field Attributes But Not Complex").build();
-                                    issuable.addIssue(issue13);
-                                    break;
-
-                                case "MessageChains":
-                                    Issue issue14 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "message_chains")).line(10)
-                                            .message("Message Chains").build();
-                                    issuable.addIssue(issue14);
-                                    break;
-
-                                case "RefusedParentBequest":
-                                    Issue issue15 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "refused_parent_bequest")).line(10)
-                                            .message("Refused Parent Bequest").build();
-                                    issuable.addIssue(issue15);
-                                    break;
-
-                                case "SpeculativeGenerality":
-                                    Issue issue16 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "speculative_generality")).line(10)
-                                            .message("Speculative Generality").build();
-                                    issuable.addIssue(issue16);
-                                    break;
-
-                                case "SwissArmyKnife":
-                                    Issue issue17 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "swiss_army_knife")).line(10)
-                                            .message("Swiss Army Knife").build();
-                                    issuable.addIssue(issue17);
-                                    break;
-
-                                case "TraditionBreaker":
-                                    Issue issue18 = issuable.newIssueBuilder()
-                                            .ruleKey(RuleKey.of("code_smells", "tradition_breaker")).line(10)
-                                            .message("Tradition Breaker").build();
-                                    issuable.addIssue(issue18);
-                                    break;
-                            }
-
-
+                            case "FunctionalDecomposition":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.FUNCTIONAL_DECOMPOSITION);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Functional decomposition");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "SpaghettiCode":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.SPAGHETTI_CODE);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Spaghetti code");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "AntiSingleton":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.ANTISINGLETON);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Anti-singleton");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "BaseClassKnowsDerivedClass":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.BASECLASS_KNOWS_DERIVED);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Base-class knows derived class");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "BaseClassShouldBeAbstract":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.BASECLASS_ABSTRACT);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Base-class should be abstract");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "LargeClass":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.LARGE_CLASS);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Large class");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "LazyClass":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.LAZY_CLASS);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Lazy class");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "LongMethod":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.LONG_METHOD);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Long method");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "LongParameterList":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.LONG_PARAMETER_LIST);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Long parameter list");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "ManyFieldAttributesButNotComplex":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.MANY_FIELD_ATTRIBUTES_NOT_COMPLEX);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Many field attributes but not complex");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "MessageChains":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.MESSAGE_CHAINS);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Message chains");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "RefusedParentBequest":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.REFUSED_PARENT_BEQUEST);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Refused parent bequest");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "SpeculativeGenerality":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.SPECULATIVE_GENERALITY);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Speculative generality");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "SwissArmyKnife":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.SWISS_ARMY_KNIFE);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Swiss army knife");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
+                            case "TraditionBreaker":
+                                newIssue = context.newIssue()
+                                        .forRule(MyCodeSmellsDefinition.TRADITION_BREAKER);
+                                primaryLocation = newIssue.newLocation()
+                                        .on(file)
+                                        .at(file.selectLine(1))
+                                        .message("Tradition breaker");
+                                newIssue.at(primaryLocation);
+                                newIssue.save();
+                                break;
                         }
                         paths.remove(clNamePath);
                         break;
@@ -298,7 +336,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         }
 	}
 
-	public final void analyseCodeLevelModelFromJavaSourceFilesEclipse(
+	private void analyseCodeLevelModelFromJavaSourceFilesEclipse(
 	        final String[] someSmells,
 			final String[] someSourceRootPaths,
             final String[] someSourceFilePaths,
@@ -354,7 +392,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 		// }
 	}
 
-	public final void analyseCodeLevelModel(final String[] someSmells,
+	private void analyseCodeLevelModel(final String[] someSmells,
                                             final String aName,
                                             final IAbstractLevelModel idiomLevelModel,
                                             final String anOutputDirectory) {
@@ -387,9 +425,5 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 		}
 	}
 
-	@Override
-	public String toString() {
-		return getClass().getSimpleName();
-	}
 
 }
