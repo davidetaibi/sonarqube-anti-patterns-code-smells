@@ -9,7 +9,7 @@ public class CodeSmellsAntiPatternsPlugin implements Plugin {
     @Override
     public void define(Context context) {
         context.addExtensions(
-                MyCodeSmellsDefinition.class,
+                CodeSmellsAntiPatternsRulesDefinition.class,
                 CodeSmellsAntiPatternsSensor.class
         );
     }

@@ -7,10 +7,10 @@ import org.sonar.api.rule.Severity;
 import org.sonar.api.server.rule.RuleParamType;
 import org.sonar.api.server.rule.RulesDefinition;
 
-public class MyCodeSmellsDefinition implements RulesDefinition {
+public class CodeSmellsAntiPatternsRulesDefinition implements RulesDefinition {
 
 
-    private static Logger LOG = LoggerFactory.getLogger(MyCodeSmellsDefinition.class);
+    private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsRulesDefinition.class);
 
 
     private static final String REPOSITORY = "code_smells";
@@ -32,6 +32,14 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
     public static final RuleKey SPECULATIVE_GENERALITY = RuleKey.of(REPOSITORY, "speculative_generality");
     public static final RuleKey SWISS_ARMY_KNIFE = RuleKey.of(REPOSITORY, "swiss_army_knife");
     public static final RuleKey TRADITION_BREAKER = RuleKey.of(REPOSITORY, "tradition_breaker");
+    public static final RuleKey[] ALL_RULES =
+            {COMPLEX_CLASS, BLOB_CLASS, CLASS_DATA_PRIVATE, FUNCTIONAL_DECOMPOSITION, SPAGHETTI_CODE,
+                    ANTISINGLETON, BASECLASS_KNOWS_DERIVED, BASECLASS_ABSTRACT, LARGE_CLASS, LAZY_CLASS,
+                    LONG_METHOD, LONG_PARAMETER_LIST, MANY_FIELD_ATTRIBUTES_NOT_COMPLEX, MESSAGE_CHAINS,
+                    REFUSED_PARENT_BEQUEST, SPECULATIVE_GENERALITY, SWISS_ARMY_KNIFE, TRADITION_BREAKER };
+
+    private static final String TAG_CODESMELL = "code-smell";
+    private static final String TAG_ANTIPATTERN = "antipattern";
 
     @Override
     public void define(Context context) {
@@ -42,7 +50,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule complex_class = repository.createRule("complex_class")
                 .setName("Complex Class")
                 .setHtmlDescription("A class having a high cyclomatic complexity")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         complex_class
                 .setDebtRemediationFunction(complex_class.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -54,7 +62,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule blob = repository.createRule("blob_class")
                 .setName("Blob class")
                 .setHtmlDescription("A large class with different responsibilities that monopolizes most of the system’s processing")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         blob
                 .setDebtRemediationFunction(blob.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -67,7 +75,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule clDataPrivate = repository.createRule("class_data_private")
                 .setName("Class Data Should be Private")
                 .setHtmlDescription("A class exposing its attributes, violating the information hiding principle")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         clDataPrivate
                 .setDebtRemediationFunction(clDataPrivate.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -79,7 +87,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule functDecomposition = repository.createRule("functional_decomposition")
                 .setName("Functional Decomposition")
                 .setHtmlDescription("A class where inheritance and polymorphism are poorly used, declaring many private fields and implementing few methods")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         functDecomposition
                 .setDebtRemediationFunction(functDecomposition.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -92,7 +100,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule spaghettiCode = repository.createRule("spaghetti_code")
                 .setName("Spaghetti Code")
                 .setHtmlDescription("A class without structure that declares long methods without parameters")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         spaghettiCode
                 .setDebtRemediationFunction(spaghettiCode.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -104,7 +112,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule antisingleton = repository.createRule("antisingleton")
                 .setName("Antisingleton")
                 .setHtmlDescription("A class that provides mutable class variables, which consequently could be used as global variables")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         antisingleton
                 .setDebtRemediationFunction(antisingleton.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -116,7 +124,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule baseclassknows = repository.createRule("baseclass_knows_derived")
                 .setName("BaseClassKnowsDerivedClass")
                 .setHtmlDescription("A class that invokes or has at least binary-class relationship pointing to one of its subclasses")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         baseclassknows
                 .setDebtRemediationFunction(baseclassknows.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -128,7 +136,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule baseclassabstr = repository.createRule("baseclass_abstract")
                 .setName("BaseClassShouldBeAbstract")
                 .setHtmlDescription("A class that has many subclasses without being abstract")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         baseclassabstr
                 .setDebtRemediationFunction(baseclassabstr.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -140,7 +148,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule large_class = repository.createRule("large_class")
                 .setName("Large class")
                 .setHtmlDescription("A class that has grown too large in term of LOCs")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         large_class
                 .setDebtRemediationFunction(large_class.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -152,7 +160,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule lazy_class = repository.createRule("lazy_class")
                 .setName("Lazy class")
                 .setHtmlDescription("A class that has few fields and methods.")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         lazy_class
                 .setDebtRemediationFunction(lazy_class.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -164,7 +172,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule long_method = repository.createRule("long_method")
                 .setName("Long method")
                 .setHtmlDescription("A class that has (at least) a method that is very long, in term of LOCs")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         long_method
                 .setDebtRemediationFunction(long_method.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -176,7 +184,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule tradition_breaker = repository.createRule("tradition_breaker")
                 .setName("Tradition breaker")
                 .setHtmlDescription("A class that inherits from a large parent class but that provides little behaviour and without subclasses")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         tradition_breaker
                 .setDebtRemediationFunction(tradition_breaker.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -188,7 +196,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule long_parameter_list = repository.createRule("long_parameter_list")
                 .setName("Long parameter list")
                 .setHtmlDescription("	A class that has (at least) one method with a too long list of parameters in comparison to the average number of parameters per methods in the system")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         long_parameter_list
                 .setDebtRemediationFunction(long_parameter_list.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -200,7 +208,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule many_field_attributes_not_complex = repository.createRule("many_field_attributes_not_complex")
                 .setName("Many field attribute not complex")
                 .setHtmlDescription("A class that declares many attributes but which is not complex and, hence, more likely to be some kind of data class holding values without providing behaviour")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         many_field_attributes_not_complex
                 .setDebtRemediationFunction(many_field_attributes_not_complex.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -212,7 +220,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule message_chains = repository.createRule("message_chains")
                 .setName("Message chains")
                 .setHtmlDescription("A class that uses a long chain of method invocations to realise (at least) one of its functionality")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         message_chains
                 .setDebtRemediationFunction(message_chains.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -224,7 +232,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule refused_parent_bequest = repository.createRule("refused_parent_bequest")
                 .setName("Refused parent bequest")
                 .setHtmlDescription("A class that redefines inherited method using empty bodies, thus breaking polymorphism")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         refused_parent_bequest
                 .setDebtRemediationFunction(refused_parent_bequest.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -236,7 +244,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule speculative_generality = repository.createRule("speculative_generality")
                 .setName("Speculative generality")
                 .setHtmlDescription("A class that is defined as abstract but that has very few children, which do not make use of its methods")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         speculative_generality
                 .setDebtRemediationFunction(speculative_generality.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -248,7 +256,7 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
         NewRule swiss_army_knife = repository.createRule("swiss_army_knife")
                 .setName("Swiss army knife")
                 .setHtmlDescription("A complex class that offers a high number of services, for example, a complex class implementing a high number of interfaces")
-                .setTags("code-smell","antipattern")
+                .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         swiss_army_knife
                 .setDebtRemediationFunction(swiss_army_knife.debtRemediationFunctions().linearWithOffset("1h", "30min"));
@@ -260,6 +268,5 @@ public class MyCodeSmellsDefinition implements RulesDefinition {
 
         // don't forget to call done() to finalize the definition
         repository.done();
-        LOG.debug("define method from MyCodeSmellsDefinition stopped");
     }
 }
