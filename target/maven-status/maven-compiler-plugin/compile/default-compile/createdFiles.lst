@@ -1,3 +1,3 @@
-it\unibz\sonarqube_plugin\CodeSmellsAntiPatternsPlugin.class
-it\unibz\sonarqube_plugin\CodeSmellsAntiPatternsRulesDefinition.class
-it\unibz\sonarqube_plugin\CodeSmellsAntiPatternsSensor.class
+it\unibz\sonarqube\plugin\CodeSmellsAntiPatternsRulesDefinition.class
+it\unibz\sonarqube\plugin\CodeSmellsAntiPatternsPlugin.class
+it\unibz\sonarqube\plugin\CodeSmellsAntiPatternsSensor.class

@@ -1,8 +1,6 @@
-package it.unibz.sonarqube_plugin;
+package it.unibz.sonarqube.plugin;
 
-import java.io.File;
-import java.io.IOException;
-import java.io.PrintWriter;
+import java.io.*;
 import java.util.ArrayList;
 import java.util.Collections;
 import java.util.List;
@@ -27,9 +25,6 @@ import ptidej.solver.OccurrenceBuilder;
 import ptidej.solver.OccurrenceComponent;
 import padl.creator.javafile.eclipse.CompleteJavaFileCreator;
 import sad.designsmell.detection.IDesignSmellDetection;
-
-import util.io.ProxyDisk;
-import util.io.ReaderInputStream;
 
 public class CodeSmellsAntiPatternsSensor implements Sensor {
 
@@ -66,7 +61,6 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
     private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsSensor.class);
     private FileSystem fs;
     private SensorContext context;
-    //private ArrayList<String> paths = new ArrayList<>();
 
     @Override
     public void describe(SensorDescriptor sensorDescriptor) {
@@ -78,7 +72,6 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
     public void execute(SensorContext sensorContext) {
         context = sensorContext;
         fs = context.fileSystem();
-
 
         String sonarBaseDir = context.settings().getString("sonar.projectBaseDir");
         String sonarSources = context.settings().getString("sonar.sources");
@@ -105,16 +98,13 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         String[] classpathEntries = new String[] { "" };
         String[] sourceFiles = new String[] { "." };
 
-        final String tempFolderName = "Test";
-        final String outputDirectoryName = ".";
         final long startTime = System.currentTimeMillis();
         final CompleteJavaFileCreator creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourceFiles);
-        final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel(tempFolderName);
+        final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
         try {
             codeLevelModel.create(creator);
         } catch (CreationException e) {
-            LOG.error("Could not create code level model, creating took " + (System.currentTimeMillis() - startTime)+" ms");
-            e.printStackTrace();
+            LOG.error("Could not create code level model, creating took " + (System.currentTimeMillis() - startTime) + " ms", e);
             return;
         }
         LOG.info("Code level model built in " + (System.currentTimeMillis() - startTime)+" ms");
@@ -131,28 +121,24 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                         + '.' + codesmellName + "Detection");
                 final IDesignSmellDetection detection = (IDesignSmellDetection) detectionClass.newInstance();
                 detection.detect(codeLevelModel);
-
-                String path = outputDirectoryName + tempFolderName + File.separatorChar + codesmellName + ".ini";
-                detection.output(new PrintWriter(ProxyDisk.getInstance().fileTempOutput(path)));
+                final ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+                detection.output(new PrintWriter(byteOutput));
 
                 final Properties properties = new Properties();
-                properties.load(new ReaderInputStream(ProxyDisk.getInstance().fileTempInput(path)));
+                properties.load(new ByteArrayInputStream(byteOutput.toByteArray()));
 
                 final OccurrenceBuilder solutionBuilder = OccurrenceBuilder.getInstance();
-                final Occurrence[] solutions = solutionBuilder.getCanonicalOccurrences(properties);
+                //final Occurrence[] solutions = solutionBuilder.getCanonicalOccurrences(properties);
                 final Occurrence[] allOccurrences = solutionBuilder.getAllOccurrences(properties);
                 LOG.debug("Classes infected by " + codesmellName + ": " + allOccurrences.length);
                 saveClassesDefects(codesmellName, allOccurrences);
 
             } catch (ClassNotFoundException e) {
-                LOG.error("Detection class not found for " + codesmellName);
-                e.printStackTrace();
+                LOG.error("Detection class not found for " + codesmellName, e);
             } catch (IllegalAccessException | InstantiationException e) {
-                LOG.error("Could not instantiate IDesignSmellDetection for " + codesmellName);
-                e.printStackTrace();
+                LOG.error("Could not instantiate IDesignSmellDetection for " + codesmellName, e);
             } catch (IOException e) {
-                LOG.error("Could not load properties from file for " + codesmellName);
-                e.printStackTrace();
+                LOG.error("Could not load properties from memory for " + codesmellName, e);
             }
         }
     }
