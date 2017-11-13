@@ -37,25 +37,25 @@
       <name>Giuseppe Aina</name>
       <timezone>+1</timezone>
     </developer>
-    
+
         <developer>
       <id>AStan</id>
       <name>Alexandru Stan</name>
       <timezone>+1</timezone>
     </developer>
-    
+
         <developer>
       <id>GVenters</id>
       <name>Gustavs Venters</name>
       <timezone>+1</timezone>
     </developer>
-    
+
         <developer>
       <id>DTaibi</id>
       <name>Davide Taibi</name>
       <timezone>+1</timezone>
     </developer>
-    
+
   </developers>
 
   <scm>
@@ -69,9 +69,9 @@
     <system>Git</system>
     <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells/issues</url>
 </issueManagement>
-  
-  
-  
+
+
+
 
     <repositories>
         <repository>
@@ -80,7 +80,7 @@
             <url>https://gv-maven-repo.appspot.com/</url>
         </repository>
     </repositories>
-  
+
   <dependencies>
 
       <dependency>
@@ -95,230 +95,230 @@
           <artifactId>commons-lang</artifactId>
           <version>2.6</version>
       </dependency>
-      
+
       <dependency>
           <groupId>org.slf4j</groupId>
           <artifactId>slf4j-api</artifactId>
           <version>1.7.21</version>
       </dependency>
-  	
+
   	<dependency>
          <groupId>padl-analyses</groupId>
          <artifactId>padl-analyses</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
      <dependency>
          <groupId>padl-aol</groupId>
          <artifactId>padl-aol</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
     <dependency>
          <groupId>org.apache.commons</groupId>
          <artifactId>commons-csv</artifactId>
          <version>1.0</version>
     </dependency>
-	
+
 	<dependency>
          <groupId>lang</groupId>
          <artifactId>lang</artifactId>
          <version>1.0</version>
     </dependency>
-	
+
 	<dependency>
          <groupId>commons-io</groupId>
          <artifactId>commons-io</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
     <dependency>
          <groupId>ptidej</groupId>
          <artifactId>ptidej</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
         <dependency>
          <groupId>padl-cpp</groupId>
          <artifactId>padl-cpp</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
     <dependency>
          <groupId>padl-csharpv1</groupId>
          <artifactId>padl-csharpv1</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
     <dependency>
          <groupId>padl-csharpv2</groupId>
          <artifactId>padl-csharpv2</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
     <dependency>
          <groupId>padl-creator-cpp</groupId>
          <artifactId>padl-creator-cpp</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
      <dependency>
          <groupId>padl-creator</groupId>
          <artifactId>padl-creator</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
      <dependency>
          <groupId>cfparse</groupId>
          <artifactId>cfparse</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
      <dependency>
          <groupId>bcel-findbugs</groupId>
          <artifactId>bcel-findbugs</artifactId>
          <version>1.0</version>
     </dependency>
-    
 
-    
+
+
     <dependency>
          <groupId>ptidej-smell</groupId>
          <artifactId>ptidej-smell</artifactId>
          <version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.core.runtime_3.11.1.v20150903</groupId>
     	<artifactId>org.eclipse.core.runtime_3.11.1.v20150903</artifactId>
     	<version>1804</version>
     </dependency>
-    
+
     <dependency>
          <groupId>org.eclipse.core.resources</groupId>
          <artifactId>org.eclipse.core.resources</artifactId>
          <version>1.0</version>
     </dependency>
-    
-    
+
+
     <dependency>
     	<groupId>javax.annotation</groupId>
     	<artifactId>javax.annotation</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>javax.inject</groupId>
     	<artifactId>javax.inject</artifactId>
     	<version>1.0</version>
     </dependency>
-    
-    
+
+
     <dependency>
     	<groupId>org.eclipse.core.contenttype</groupId>
     	<artifactId>org.eclipse.core.contenttype</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.core.jobs</groupId>
     	<artifactId>org.eclipse.core.jobs</artifactId>
     	<version>1.0</version>
     </dependency>
-    
-    
-    
- 
-   
-   
-    
+
+
+
+
+
+
+
 
     <dependency>
     	<groupId>org.eclipse.equinox.app</groupId>
     	<artifactId>org.eclipse.equinox.app</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.equinox.common</groupId>
     	<artifactId>org.eclipse.equinox.common</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.equinox.preferences</groupId>
     	<artifactId>org.eclipse.equinox.preferences</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.equinox.registry</groupId>
     	<artifactId>org.eclipse.equinox.registry</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.jdt.compiler.apt</groupId>
     	<artifactId>org.eclipse.jdt.compiler.apt</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.jdt.compiler.tool</groupId>
     	<artifactId>org.eclipse.jdt.compiler.tool</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.jdt.core</groupId>
     	<artifactId>org.eclipse.jdt.core</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.jface.text</groupId>
     	<artifactId>org.eclipse.jface.text</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.osgi.compatibility.state</groupId>
     	<artifactId>org.eclipse.osgi.compatibility.state</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.osgi</groupId>
     	<artifactId>org.eclipse.osgi</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
     <dependency>
     	<groupId>org.eclipse.text</groupId>
     	<artifactId>org.eclipse.text</artifactId>
     	<version>1.0</version>
     </dependency>
-    
+
    	<dependency>
  		<groupId>org.eclipse.core.runtime.compatibility.registry</groupId>
  		<artifactId>org.eclipse.core.runtime.compatibility.registry</artifactId>
  		<version>1.0</version>
  	</dependency>
- 	
+
  	<dependency>
  		<groupId>motifs</groupId>
  		<artifactId>motifs</artifactId>
  		<version>1.0</version>
  	</dependency>
-    
 
-    
+
+
 
   </dependencies>
- 
+
   	<build>
 		<plugins>
-			
+
 			<plugin>
 				<groupId>org.sonarsource.sonar-packaging-maven-plugin</groupId>
 				<artifactId>sonar-packaging-maven-plugin</artifactId>
@@ -356,8 +356,29 @@
                 </executions>
             </plugin>
 
+            <plugin>
+                <groupId>org.sonarsource.scanner.maven</groupId>
+                <artifactId>sonar-maven-plugin</artifactId>
+                <version>3.2</version>
+            </plugin>
+
 		</plugins>
 	</build>
-  
+
+    <profiles>
+        <profile>
+            <id>sonar</id>
+            <activation>
+                <activeByDefault>true</activeByDefault>
+            </activation>
+            <properties>
+                <!-- Optional URL to server. Default value is http://localhost:9000 -->
+                <sonar.host.url>
+                    http://localhost:9000
+                </sonar.host.url>
+            </properties>
+        </profile>
+    </profiles>
+
  </project>
 
