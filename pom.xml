@@ -3,7 +3,7 @@
 <project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.unibz.sonarqube_extension</groupId>
-  <artifactId>CodeSmellsAntiPatterns</artifactId>
+  <artifactId>codesmellsantipatterns</artifactId>
   <version>0.5</version>
   <name>Code Smells and Anti Patterns detection</name>
   <description>A plugin for analysing code smells and antipatterns through the ptidej library</description>
@@ -326,9 +326,9 @@
 				<extensions>true</extensions>
 				<configuration>
 					<pluginClass>it.unibz.sonarqube.plugin.CodeSmellsAntiPatternsPlugin</pluginClass>
-					<pluginKey>CodeSmellsAntiPatterns</pluginKey>
+					<pluginKey>codesmellsantipatterns</pluginKey>
                     <pluginName>${project.name}</pluginName>
-                    <finalName>sonar-CodeSmellsAntiPatterns-plugin-${project.version}</finalName>
+                    <finalName>sonar-codesmellsantipatterns-plugin-${project.version}</finalName>
 				</configuration>
 			</plugin>
 
