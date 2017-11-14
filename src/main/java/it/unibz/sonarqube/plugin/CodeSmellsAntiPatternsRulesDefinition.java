@@ -30,26 +30,26 @@ public class CodeSmellsAntiPatternsRulesDefinition implements RulesDefinition {
     private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsRulesDefinition.class);
 
 
-    private static final String REPOSITORY = "code_smells";
-    public static final RuleKey COMPLEX_CLASS = RuleKey.of(REPOSITORY, "complex_class");
-    public static final RuleKey BLOB_CLASS = RuleKey.of(REPOSITORY, "blob_class");
-    public static final RuleKey CLASS_DATA_PRIVATE = RuleKey.of(REPOSITORY, "class_data_private");
-    public static final RuleKey FUNCTIONAL_DECOMPOSITION = RuleKey.of(REPOSITORY, "functional_decomposition");
-    public static final RuleKey SPAGHETTI_CODE = RuleKey.of(REPOSITORY, "spaghetti_code");
-    public static final RuleKey ANTISINGLETON = RuleKey.of(REPOSITORY, "antisingleton");
-    public static final RuleKey BASECLASS_KNOWS_DERIVED = RuleKey.of(REPOSITORY, "baseclass_knows_derived");
-    public static final RuleKey BASECLASS_ABSTRACT = RuleKey.of(REPOSITORY, "baseclass_abstract");
-    public static final RuleKey LARGE_CLASS = RuleKey.of(REPOSITORY, "large_class");
-    public static final RuleKey LAZY_CLASS = RuleKey.of(REPOSITORY, "lazy_class");
-    public static final RuleKey LONG_METHOD = RuleKey.of(REPOSITORY, "long_method");
-    public static final RuleKey LONG_PARAMETER_LIST = RuleKey.of(REPOSITORY, "long_parameter_list");
-    public static final RuleKey MANY_FIELD_ATTRIBUTES_NOT_COMPLEX = RuleKey.of(REPOSITORY, "many_field_attributes_not_complex");
-    public static final RuleKey MESSAGE_CHAINS = RuleKey.of(REPOSITORY, "message_chains");
-    public static final RuleKey REFUSED_PARENT_BEQUEST = RuleKey.of(REPOSITORY, "refused_parent_bequest");
-    public static final RuleKey SPECULATIVE_GENERALITY = RuleKey.of(REPOSITORY, "speculative_generality");
-    public static final RuleKey SWISS_ARMY_KNIFE = RuleKey.of(REPOSITORY, "swiss_army_knife");
-    public static final RuleKey TRADITION_BREAKER = RuleKey.of(REPOSITORY, "tradition_breaker");
-    public static final RuleKey[] ALL_RULES =
+    static final String REPOSITORY = "code_smells";
+    static final RuleKey COMPLEX_CLASS = RuleKey.of(REPOSITORY, "complex_class");
+    static final RuleKey BLOB_CLASS = RuleKey.of(REPOSITORY, "blob_class");
+    static final RuleKey CLASS_DATA_PRIVATE = RuleKey.of(REPOSITORY, "class_data_private");
+    static final RuleKey FUNCTIONAL_DECOMPOSITION = RuleKey.of(REPOSITORY, "functional_decomposition");
+    static final RuleKey SPAGHETTI_CODE = RuleKey.of(REPOSITORY, "spaghetti_code");
+    static final RuleKey ANTISINGLETON = RuleKey.of(REPOSITORY, "antisingleton");
+    static final RuleKey BASECLASS_KNOWS_DERIVED = RuleKey.of(REPOSITORY, "baseclass_knows_derived");
+    static final RuleKey BASECLASS_ABSTRACT = RuleKey.of(REPOSITORY, "baseclass_abstract");
+    static final RuleKey LARGE_CLASS = RuleKey.of(REPOSITORY, "large_class");
+    static final RuleKey LAZY_CLASS = RuleKey.of(REPOSITORY, "lazy_class");
+    static final RuleKey LONG_METHOD = RuleKey.of(REPOSITORY, "long_method");
+    static final RuleKey LONG_PARAMETER_LIST = RuleKey.of(REPOSITORY, "long_parameter_list");
+    static final RuleKey MANY_FIELD_ATTRIBUTES_NOT_COMPLEX = RuleKey.of(REPOSITORY, "many_field_attributes_not_complex");
+    static final RuleKey MESSAGE_CHAINS = RuleKey.of(REPOSITORY, "message_chains");
+    static final RuleKey REFUSED_PARENT_BEQUEST = RuleKey.of(REPOSITORY, "refused_parent_bequest");
+    static final RuleKey SPECULATIVE_GENERALITY = RuleKey.of(REPOSITORY, "speculative_generality");
+    static final RuleKey SWISS_ARMY_KNIFE = RuleKey.of(REPOSITORY, "swiss_army_knife");
+    static final RuleKey TRADITION_BREAKER = RuleKey.of(REPOSITORY, "tradition_breaker");
+    static final RuleKey[] ALL_RULES =
             {COMPLEX_CLASS, BLOB_CLASS, CLASS_DATA_PRIVATE, FUNCTIONAL_DECOMPOSITION, SPAGHETTI_CODE,
                     ANTISINGLETON, BASECLASS_KNOWS_DERIVED, BASECLASS_ABSTRACT, LARGE_CLASS, LAZY_CLASS,
                     LONG_METHOD, LONG_PARAMETER_LIST, MANY_FIELD_ATTRIBUTES_NOT_COMPLEX, MESSAGE_CHAINS,

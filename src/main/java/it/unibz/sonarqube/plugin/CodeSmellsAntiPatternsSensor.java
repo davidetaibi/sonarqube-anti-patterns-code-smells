@@ -81,8 +81,10 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
     @Override
     public void describe(SensorDescriptor sensorDescriptor) {
-        // Shows at start of analysis
-        //LOG.debug("-------------------------> Sensor descriptor");
+        sensorDescriptor
+                .name("Code Smell Anti-pattern Sensor")
+                .onlyOnLanguage("java")
+                .createIssuesForRuleRepository(CodeSmellsAntiPatternsRulesDefinition.REPOSITORY);
     }
 
     @Override
@@ -111,9 +113,9 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                     sourcePathList.add(moduleName + File.separatorChar + sourceName);
         LOG.debug("Source path entries " + sourcePathList.toString());
 
-        String[] sourcePathEntries = sourcePathList.toArray(new String[sourcePathList.size()]);
-        String[] classpathEntries = new String[] { "" };
-        String[] sourceFiles = new String[] { "." };
+        final String[] sourcePathEntries = sourcePathList.toArray(new String[sourcePathList.size()]);
+        final String[] classpathEntries = new String[] { "" };
+        final String[] sourceFiles = new String[] { "." };
 
         final long startTime = System.currentTimeMillis();
         final CompleteJavaFileCreator creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourceFiles);
@@ -161,16 +163,9 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
     }
 
     private void saveClassesDefects(final String codesmellName, final Occurrence[] allOccurrences) {
-        FilePredicates f = this.fs.predicates();
-        FilePredicate fp = f.all();
-        Iterable<File> files = fs.files(fp);
-        ArrayList<String> paths = new ArrayList<>();
-        for (File file : files) {
-            if(file.getAbsolutePath().endsWith(".java")) {
-                LOG.debug("Adding to ptidej paths: " + file.getAbsolutePath());
-                paths.add(file.getAbsolutePath());
-            }
-        }
+        final FilePredicates f = this.fs.predicates();
+        final FilePredicate fp = f.hasExtension("java");
+        final Iterable<InputFile> files = fs.inputFiles(fp);
 
         for (final Occurrence occ : allOccurrences) {
             @SuppressWarnings("unchecked")
@@ -182,20 +177,16 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                 } else {
                     solutionComponent = listOccComponents.get(0);
                 }
-
-                String rawClassName = new String(solutionComponent.getValue());
-                String className = rawClassName.substring(rawClassName.lastIndexOf(".") + 1).trim();
+                final String rawClassName = solutionComponent.getDisplayValue();
+                final String className = rawClassName.substring(rawClassName.lastIndexOf(".") + 1).trim();
                 LOG.debug("Infected class detected by ptidej: " + rawClassName);
 
-                for (String clNamePath : paths) {
-                    String clNameAndExtension = clNamePath.substring(clNamePath.lastIndexOf(File.separatorChar) + 1).trim();
-                    String[] parts = clNameAndExtension.split("\\.");
-                    String clName = parts[0];
+                for (final InputFile file : files) {
+                    final String[] parts = file.relativePath().split("[./]");
+                    final String clName = parts[Math.max(parts.length - 2, 0)]; // part before "."
                     LOG.debug("comparing: " + clName + " and " + className);
                     if (clName.equals(className)) {
-                        InputFile file = fs.inputFile(fs.predicates().hasAbsolutePath(clNamePath));
                         saveIssue(codesmellName, file);
-                        paths.remove(clNamePath);
                         break;
                     }
                 }
