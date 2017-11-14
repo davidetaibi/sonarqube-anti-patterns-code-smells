@@ -18,59 +18,52 @@
     </properties>
 
 
-  <organization>
-    <name>Free University of Bolzano Bozen</name>
-    <url>https://www.unibz.it</url>
-  </organization>
+    <organization>
+        <name>Free University of Bozen-Bolzano</name>
+        <url>https://www.unibz.it</url>
+    </organization>
 
-  <licenses>
-    <license>
-      <name>GNU LGPL 3</name>
-      <url>http://www.gnu.org/licenses/lgpl.txt</url>
-      <distribution>repo</distribution>
-    </license>
-  </licenses>
+    <licenses>
+        <license>
+            <name>GNU GPLv3</name>
+            <url>http://www.gnu.org/licenses/</url>
+            <distribution>repo</distribution>
+        </license>
+    </licenses>
 
-  <developers>
-    <developer>
-      <id>GAina</id>
-      <name>Giuseppe Aina</name>
-      <timezone>+1</timezone>
-    </developer>
-
+    <developers>
         <developer>
-      <id>AStan</id>
-      <name>Alexandru Stan</name>
-      <timezone>+1</timezone>
-    </developer>
-
+            <id>GAina</id>
+            <name>Giuseppe Aina</name>
+            <timezone>+1</timezone>
+        </developer>
         <developer>
-      <id>GVenters</id>
-      <name>Gustavs Venters</name>
-      <timezone>+1</timezone>
-    </developer>
-
+            <id>AStan</id>
+            <name>Alexandru Stan</name>
+            <timezone>+1</timezone>
+        </developer>
         <developer>
-      <id>DTaibi</id>
-      <name>Davide Taibi</name>
-      <timezone>+1</timezone>
-    </developer>
+            <id>DTaibi</id>
+            <name>Davide Taibi</name>
+            <timezone>+1</timezone>
+        </developer>
+        <developer>
+            <id>GVenters</id>
+            <name>Gustavs Venters</name>
+            <timezone>+1</timezone>
+        </developer>
+    </developers>
 
-  </developers>
+    <scm>
+        <connection>scm:git:git@github.com:davidetaibi/sonarqube-anti-patterns-code-smells.git</connection>
+        <developerConnection>scm:git:git@github.com:davidetaibi/sonarqube-anti-patterns-code-smells.git</developerConnection>
+        <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>
+    </scm>
 
-  <scm>
-    <connection>scm:git:git@github.com:davidetaibi/sonarqube-anti-patterns-code-smells.git</connection>
-    <developerConnection>scm:git:git@github.com:davidetaibi/sonarqube-anti-patterns-code-smells.git</developerConnection>
-    <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>
-
-  </scm>
-
-  <issueManagement>
-    <system>Git</system>
-    <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells/issues</url>
-</issueManagement>
-
-
+    <issueManagement>
+        <system>Git</system>
+        <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells/issues</url>
+    </issueManagement>
 
 
     <repositories>
