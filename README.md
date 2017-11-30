@@ -62,5 +62,6 @@ This plug-in has been tested with Sonarqube 6.3 and 6.7
 * Empirical study to test the code smell effectiveness 
 
 
-##References
+## References
+
 <a name="myfootnote1">1</a>: Fowler, Martin. "CodeSmell". http://martinfowler.com/. Retrieved July 2014
