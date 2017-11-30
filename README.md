@@ -40,29 +40,27 @@ This sonarqube plugin detects anti patterns and code smells, as defined by Marti
 
 ##  Licence
 
-GNU Public License v2.
+GNU Public License v3.
 
 ##  Compatibility
-This plug-in has been tested with Sonarqube 5.4 and 5.5
+This plug-in has been tested with Sonarqube 6.3 and 6.7
 
 ##  How to install
 
--- Copy the Antipatterns jar file in the plugins folder of your Sonarqube installation.
+1. Copy  jar file in the plugins folder of your Sonarqube installation.
 
--- Restart the Sonarqube process in your machine.
+2. Restart the Sonarqube process in your machine.
 
--- Add a widget to visualize code smells and anti-patterns (Configure widget -> add widget)
-
+3. Add plugin rules to your Quality Profile. They can be filtered by repository or tag name:
+    1. _Repository:_ "Code-smell rules repository Java"
+    2. _Tags:_ "antipattern","code-smell"
 
 ## Roadmap
-We are planning to extend the plug-in in the next months. However, any help is highly appreciated ;-)
 
-* Dedicated widget
-**  In the current version, a custom widget must be manually created (Custom Widget - Add Widget) 
-* Increase analysis performances 
-* Standalone implementation (whithout the ptidej-5 libraries) 
-* Empirical study to test the code smells effectiveness 
+* Increasing analysis performances 
+* Standalone implementation (without the ptidej-5 libraries) 
+* Empirical study to test the code smell effectiveness 
 
 
 ##References
-<a name="myfootnote1">1</a>Fowler, Martin. "CodeSmell". http://martinfowler.com/. Retrieved July 2014
+<a name="myfootnote1">1</a>: Fowler, Martin. "CodeSmell". http://martinfowler.com/. Retrieved July 2014
