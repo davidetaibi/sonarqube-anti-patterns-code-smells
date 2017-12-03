@@ -58,229 +58,229 @@ public class CodeSmellsAntiPatternsRulesDefinition implements RulesDefinition {
     private static final String TAG_CODESMELL = "code-smell";
     private static final String TAG_ANTIPATTERN = "antipattern";
 
+    private static final String ACCEPT_WHITESPACE_PARAM = "acceptWhitespace";
+    private static final String ACCEPT_WHITESPACES_DESCRIPTION = "Accept whitespaces on the line";
+
     @Override
-    public void define(Context context) {
+    public void define(final Context context) {
 
-        NewRepository repository = context.createRepository(REPOSITORY, "java").setName("Code-smell rules repository");
+        final NewRepository repository = context.createRepository(REPOSITORY, "java").setName("Code-smell rules repository");
 
 
-        NewRule complex_class = repository.createRule("complex_class")
+        final NewRule complex_class = repository.createRule(COMPLEX_CLASS.rule())
                 .setName("Complex Class")
                 .setHtmlDescription("A class having a high cyclomatic complexity")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         complex_class
                 .setDebtRemediationFunction(complex_class.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        complex_class.createParam("acceptWhitespace")
+        complex_class.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule blob = repository.createRule("blob_class")
+        final NewRule blob = repository.createRule(BLOB_CLASS.rule())
                 .setName("Blob class")
                 .setHtmlDescription("A large class with different responsibilities that monopolizes most of the system’s processing")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
-        blob
-                .setDebtRemediationFunction(blob.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        blob.createParam("acceptWhitespace")
+        blob    .setDebtRemediationFunction(blob.debtRemediationFunctions().linearWithOffset("1h", "30min"));
+        blob.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-
-        NewRule clDataPrivate = repository.createRule("class_data_private")
+        final NewRule clDataPrivate = repository.createRule(CLASS_DATA_PRIVATE.rule())
                 .setName("Class Data Should be Private")
                 .setHtmlDescription("A class exposing its attributes, violating the information hiding principle")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         clDataPrivate
                 .setDebtRemediationFunction(clDataPrivate.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        clDataPrivate.createParam("acceptWhitespace")
+        clDataPrivate.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule functDecomposition = repository.createRule("functional_decomposition")
+        final NewRule functDecomposition = repository.createRule(FUNCTIONAL_DECOMPOSITION.rule())
                 .setName("Functional Decomposition")
                 .setHtmlDescription("A class where inheritance and polymorphism are poorly used, declaring many private fields and implementing few methods")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         functDecomposition
                 .setDebtRemediationFunction(functDecomposition.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        functDecomposition.createParam("acceptWhitespace")
+        functDecomposition.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-
-        NewRule spaghettiCode = repository.createRule("spaghetti_code")
+        final NewRule spaghettiCode = repository.createRule(SPAGHETTI_CODE.rule())
                 .setName("Spaghetti Code")
                 .setHtmlDescription("A class without structure that declares long methods without parameters")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         spaghettiCode
                 .setDebtRemediationFunction(spaghettiCode.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        spaghettiCode.createParam("acceptWhitespace")
+        spaghettiCode.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule antisingleton = repository.createRule("antisingleton")
+        final NewRule antisingleton = repository.createRule(ANTISINGLETON.rule())
                 .setName("Antisingleton")
                 .setHtmlDescription("A class that provides mutable class variables, which consequently could be used as global variables")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         antisingleton
                 .setDebtRemediationFunction(antisingleton.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        antisingleton.createParam("acceptWhitespace")
+        antisingleton.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule baseclassknows = repository.createRule("baseclass_knows_derived")
+        final NewRule baseclassknows = repository.createRule(BASECLASS_KNOWS_DERIVED.rule())
                 .setName("BaseClassKnowsDerivedClass")
                 .setHtmlDescription("A class that invokes or has at least binary-class relationship pointing to one of its subclasses")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         baseclassknows
                 .setDebtRemediationFunction(baseclassknows.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        baseclassknows.createParam("acceptWhitespace")
+        baseclassknows.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule baseclassabstr = repository.createRule("baseclass_abstract")
+        final NewRule baseclassabstr = repository.createRule(BASECLASS_ABSTRACT.rule())
                 .setName("BaseClassShouldBeAbstract")
                 .setHtmlDescription("A class that has many subclasses without being abstract")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         baseclassabstr
                 .setDebtRemediationFunction(baseclassabstr.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        baseclassabstr.createParam("acceptWhitespace")
+        baseclassabstr.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule large_class = repository.createRule("large_class")
+        final NewRule large_class = repository.createRule(LARGE_CLASS.rule())
                 .setName("Large class")
                 .setHtmlDescription("A class that has grown too large in term of LOCs")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         large_class
                 .setDebtRemediationFunction(large_class.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        large_class.createParam("acceptWhitespace")
+        large_class.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule lazy_class = repository.createRule("lazy_class")
+        final NewRule lazy_class = repository.createRule(LAZY_CLASS.rule())
                 .setName("Lazy class")
                 .setHtmlDescription("A class that has few fields and methods.")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         lazy_class
                 .setDebtRemediationFunction(lazy_class.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        lazy_class.createParam("acceptWhitespace")
+        lazy_class.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule long_method = repository.createRule("long_method")
+        final NewRule long_method = repository.createRule(LONG_METHOD.rule())
                 .setName("Long method")
                 .setHtmlDescription("A class that has (at least) a method that is very long, in term of LOCs")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         long_method
                 .setDebtRemediationFunction(long_method.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        long_method.createParam("acceptWhitespace")
+        long_method.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule tradition_breaker = repository.createRule("tradition_breaker")
+        final NewRule tradition_breaker = repository.createRule(TRADITION_BREAKER.rule())
                 .setName("Tradition breaker")
                 .setHtmlDescription("A class that inherits from a large parent class but that provides little behaviour and without subclasses")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         tradition_breaker
                 .setDebtRemediationFunction(tradition_breaker.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        tradition_breaker.createParam("acceptWhitespace")
+        tradition_breaker.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule long_parameter_list = repository.createRule("long_parameter_list")
+        final NewRule long_parameter_list = repository.createRule(LONG_PARAMETER_LIST.rule())
                 .setName("Long parameter list")
                 .setHtmlDescription("	A class that has (at least) one method with a too long list of parameters in comparison to the average number of parameters per methods in the system")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         long_parameter_list
                 .setDebtRemediationFunction(long_parameter_list.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        long_parameter_list.createParam("acceptWhitespace")
+        long_parameter_list.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule many_field_attributes_not_complex = repository.createRule("many_field_attributes_not_complex")
+        final NewRule many_field_attributes_not_complex = repository.createRule(MANY_FIELD_ATTRIBUTES_NOT_COMPLEX.rule())
                 .setName("Many field attribute not complex")
                 .setHtmlDescription("A class that declares many attributes but which is not complex and, hence, more likely to be some kind of data class holding values without providing behaviour")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         many_field_attributes_not_complex
                 .setDebtRemediationFunction(many_field_attributes_not_complex.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        many_field_attributes_not_complex.createParam("acceptWhitespace")
+        many_field_attributes_not_complex.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule message_chains = repository.createRule("message_chains")
+        final NewRule message_chains = repository.createRule(MESSAGE_CHAINS.rule())
                 .setName("Message chains")
                 .setHtmlDescription("A class that uses a long chain of method invocations to realise (at least) one of its functionality")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         message_chains
                 .setDebtRemediationFunction(message_chains.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        message_chains.createParam("acceptWhitespace")
+        message_chains.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule refused_parent_bequest = repository.createRule("refused_parent_bequest")
+        final NewRule refused_parent_bequest = repository.createRule(REFUSED_PARENT_BEQUEST.rule())
                 .setName("Refused parent bequest")
                 .setHtmlDescription("A class that redefines inherited method using empty bodies, thus breaking polymorphism")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         refused_parent_bequest
                 .setDebtRemediationFunction(refused_parent_bequest.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        refused_parent_bequest.createParam("acceptWhitespace")
+        refused_parent_bequest.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule speculative_generality = repository.createRule("speculative_generality")
+        final NewRule speculative_generality = repository.createRule(SPECULATIVE_GENERALITY.rule())
                 .setName("Speculative generality")
                 .setHtmlDescription("A class that is defined as abstract but that has very few children, which do not make use of its methods")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         speculative_generality
                 .setDebtRemediationFunction(speculative_generality.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        speculative_generality.createParam("acceptWhitespace")
+        speculative_generality.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
-        NewRule swiss_army_knife = repository.createRule("swiss_army_knife")
+        final NewRule swiss_army_knife = repository.createRule(SWISS_ARMY_KNIFE.rule())
                 .setName("Swiss army knife")
                 .setHtmlDescription("A complex class that offers a high number of services, for example, a complex class implementing a high number of interfaces")
                 .setTags(TAG_CODESMELL, TAG_ANTIPATTERN)
                 .setSeverity(Severity.MAJOR);
         swiss_army_knife
                 .setDebtRemediationFunction(swiss_army_knife.debtRemediationFunctions().linearWithOffset("1h", "30min"));
-        swiss_army_knife.createParam("acceptWhitespace")
+        swiss_army_knife.createParam(ACCEPT_WHITESPACE_PARAM)
                 .setDefaultValue("false")
                 .setType(RuleParamType.BOOLEAN)
-                .setDescription("Accept whitespaces on the line");
+                .setDescription(ACCEPT_WHITESPACES_DESCRIPTION);
 
 
         // don't forget to call done() to finalize the definition
