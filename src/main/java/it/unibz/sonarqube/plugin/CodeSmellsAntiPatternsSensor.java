@@ -76,7 +76,6 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
 
     private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsSensor.class);
-    private FileSystem fs;
     private SensorContext context;
 
     @Override
@@ -90,14 +89,13 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
     @Override
     public void execute(SensorContext sensorContext) {
         context = sensorContext;
-        fs = context.fileSystem();
 
-        String sonarBaseDir = context.settings().getString("sonar.projectBaseDir");
-        String sonarSources = context.settings().getString("sonar.sources");
-        String sonarModules = context.settings().getString("sonar.modules");
-        LOG.debug("BaseDir " + sonarBaseDir);
-        LOG.debug("Sources " + sonarSources);
-        LOG.debug("Modules " + sonarModules);
+        final String sonarBaseDir = context.settings().getString("sonar.projectBaseDir");
+        final String sonarSources = context.settings().getString("sonar.sources");
+        final String sonarModules = context.settings().getString("sonar.modules");
+        LOG.debug("BaseDir {}", sonarBaseDir);
+        LOG.debug("Sources {}", sonarSources);
+        LOG.debug("Modules {}", sonarModules);
 
         //https://docs.sonarqube.org/display/SCAN/Advanced+SonarQube+Scanner+Usages
         List<String> sourcePathList = new ArrayList<>();
@@ -111,7 +109,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
             for (String moduleName : sonarModules.split(","))
                 for (String sourceName : sonarSources.split(","))
                     sourcePathList.add(moduleName + File.separatorChar + sourceName);
-        LOG.debug("Source path entries " + sourcePathList.toString());
+        LOG.debug("Source path entries {}", sourcePathList);
 
         final String[] sourcePathEntries = sourcePathList.toArray(new String[sourcePathList.size()]);
         final String[] classpathEntries = new String[] { "" };
@@ -122,12 +120,12 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
         try {
             codeLevelModel.create(creator);
-        } catch (CreationException e) {
-            LOG.error("Could not create code level model, creating took " + (System.currentTimeMillis() - startTime) + " ms", e);
+        } catch (Exception e) {
+            LOG.error("Could not create code level model, creating took {}ms", (System.currentTimeMillis() - startTime), e);
             return;
         }
-        LOG.info("Code level model built in " + (System.currentTimeMillis() - startTime)+" ms");
-        LOG.info("Code level model contains " + codeLevelModel.getNumberOfTopLevelEntities() + " top-level entities");
+        LOG.info("Code level model built in {}ms", (System.currentTimeMillis() - startTime));
+        LOG.info("Code level model contains {} top-level entities", codeLevelModel.getNumberOfTopLevelEntities());
 
         final LOCModelAnnotator locModelAnnotator = new LOCModelAnnotator(codeLevelModel);
         creator.applyAnnotator(locModelAnnotator);
@@ -135,37 +133,47 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         creator.applyAnnotator(conditionalModelAnnotator);
 
         for (final String codesmellName : CODE_SMELLS) {
-            try {
-                final Class<?> detectionClass = Class.forName("sad.designsmell.detection.repository." + codesmellName
-                        + '.' + codesmellName + "Detection");
-                final IDesignSmellDetection detection = (IDesignSmellDetection) detectionClass.newInstance();
-                detection.detect(codeLevelModel);
-                final ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
-                detection.output(new PrintWriter(byteOutput));
-
-                final Properties properties = new Properties();
-                properties.load(new ByteArrayInputStream(byteOutput.toByteArray()));
-
-                final OccurrenceBuilder solutionBuilder = OccurrenceBuilder.getInstance();
-                //final Occurrence[] solutions = solutionBuilder.getCanonicalOccurrences(properties);
-                final Occurrence[] allOccurrences = solutionBuilder.getAllOccurrences(properties);
-                LOG.debug("Classes infected by " + codesmellName + ": " + allOccurrences.length);
-                saveClassesDefects(codesmellName, allOccurrences);
-
-            } catch (ClassNotFoundException e) {
-                LOG.error("Detection class not found for " + codesmellName, e);
-            } catch (IllegalAccessException | InstantiationException e) {
-                LOG.error("Could not instantiate IDesignSmellDetection for " + codesmellName, e);
-            } catch (IOException e) {
-                LOG.error("Could not load properties from memory for " + codesmellName, e);
-            }
+            detectCodeSmell(codeLevelModel, codesmellName);
         }
     }
 
+    /**
+     * Detects the code-smell using the padl code level model
+     */
+    private void detectCodeSmell(final ICodeLevelModel codeLevelModel, final String codesmellName) {
+        try {
+            final Class<?> detectionClass = Class.forName("sad.designsmell.detection.repository." + codesmellName
+                    + '.' + codesmellName + "Detection");
+            final IDesignSmellDetection detection = (IDesignSmellDetection) detectionClass.newInstance();
+            detection.detect(codeLevelModel);
+            final ByteArrayOutputStream byteOutput = new ByteArrayOutputStream();
+            detection.output(new PrintWriter(byteOutput));
+
+            final Properties properties = new Properties();
+            properties.load(new ByteArrayInputStream(byteOutput.toByteArray()));
+
+            final OccurrenceBuilder solutionBuilder = OccurrenceBuilder.getInstance();
+            //final Occurrence[] solutions = solutionBuilder.getCanonicalOccurrences(properties);
+            final Occurrence[] allOccurrences = solutionBuilder.getAllOccurrences(properties);
+            LOG.debug("Classes infected by {}: {}", codesmellName, allOccurrences.length);
+            saveClassesDefects(codesmellName, allOccurrences);
+
+        } catch (ClassNotFoundException e) {
+            LOG.error("Detection class not found for {}", codesmellName, e);
+        } catch (IllegalAccessException | InstantiationException e) {
+            LOG.error("Could not instantiate IDesignSmellDetection for {}", codesmellName, e);
+        } catch (IOException e) {
+            LOG.error("Could not load properties from memory for {}", codesmellName, e);
+        }
+    }
+
+    /**
+     * Saves all code-smell occurrences found in padl code level model
+     */
     private void saveClassesDefects(final String codesmellName, final Occurrence[] allOccurrences) {
-        final FilePredicates f = this.fs.predicates();
+        final FilePredicates f = context.fileSystem().predicates();
         final FilePredicate fp = f.hasExtension("java");
-        final Iterable<InputFile> files = fs.inputFiles(fp);
+        final Iterable<InputFile> files = context.fileSystem().inputFiles(fp);
 
         for (final Occurrence occ : allOccurrences) {
             @SuppressWarnings("unchecked")
@@ -178,13 +186,12 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                     solutionComponent = listOccComponents.get(0);
                 }
                 final String rawClassName = solutionComponent.getDisplayValue();
-                final String className = rawClassName.substring(rawClassName.lastIndexOf(".") + 1).trim();
-                LOG.debug("Infected class detected by ptidej: " + rawClassName);
+                final String className = rawClassName.substring(rawClassName.lastIndexOf('.') + 1).trim();
+                LOG.debug("Infected class detected by ptidej: {}", rawClassName);
 
                 for (final InputFile file : files) {
                     final String[] parts = file.relativePath().split("[./]");
                     final String clName = parts[Math.max(parts.length - 2, 0)]; // part before "."
-                    LOG.debug("comparing: " + clName + " and " + className);
                     if (clName.equals(className)) {
                         saveIssue(codesmellName, file);
                         break;
@@ -194,7 +201,10 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         }
     }
 
-    private void saveIssue(String codesmellName, InputFile file) {
+    /**
+     * Adds code-smell to the issues of a Sonarqube project file.
+     */
+    private void saveIssue(final String codesmellName, final InputFile file) {
         if (file == null) {
             LOG.error("Input file from absolutePath is null");
             return;
@@ -384,7 +394,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                 newIssue.save();
                 break;
             default:
-                LOG.error("No such code-smell defined: " + codesmellName);
+                LOG.error("No such code-smell defined: {}", codesmellName);
         }
     }
 
