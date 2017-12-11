@@ -113,7 +113,6 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                     sourcePathList.add(moduleName + File.separatorChar + sourceName);
         LOG.debug("Source path entries " + sourcePathList);
         final String[] classpathEntries = new String[] { "" };
-        final String[] sourceFiles = new String[] { "." };
 
         final long startTime = System.currentTimeMillis();
         final CompleteJavaFileCreator creator;
@@ -121,7 +120,8 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
             final List<String> srcPathList = new ArrayList<>();
             for(final String s : sourcePathList)
                 srcPathList.add(sonarBaseDir + File.separatorChar + s);
-            creator = new CompleteJavaFileCreator(srcPathList.toArray(new String[srcPathList.size()]), classpathEntries, sourceFiles);
+            final String[] src = srcPathList.toArray(new String[srcPathList.size()]);
+            creator = new CompleteJavaFileCreator(src, classpathEntries, src);
         } catch (final Exception e) {
             if (LOG.isErrorEnabled())
                 LOG.error("Could not create java file creator for following entries: " + sourcePathList, e);
