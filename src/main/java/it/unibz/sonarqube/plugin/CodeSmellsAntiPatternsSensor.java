@@ -32,6 +32,7 @@ import org.sonar.api.batch.sensor.SensorDescriptor;
 import org.sonar.api.batch.sensor.issue.NewIssue;
 import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 
+import padl.creator.javafile.eclipse.CompleteJavaFileCreator;
 import padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator;
 import padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator;
 import padl.kernel.ICodeLevelModel;
@@ -40,7 +41,6 @@ import padl.kernel.impl.Factory;
 import ptidej.solver.Occurrence;
 import ptidej.solver.OccurrenceBuilder;
 import ptidej.solver.OccurrenceComponent;
-import padl.creator.javafile.eclipse.CompleteJavaFileCreator;
 import sad.designsmell.detection.IDesignSmellDetection;
 
 public class CodeSmellsAntiPatternsSensor implements Sensor {
@@ -111,14 +111,22 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
             for (String moduleName : sonarModules.split(","))
                 for (String sourceName : sonarSources.split(","))
                     sourcePathList.add(moduleName + File.separatorChar + sourceName);
-        LOG.debug("Source path entries " + sourcePathList.toString());
-
-        final String[] sourcePathEntries = sourcePathList.toArray(new String[sourcePathList.size()]);
+        LOG.debug("Source path entries " + sourcePathList);
         final String[] classpathEntries = new String[] { "" };
-        final String[] sourceFiles = new String[] { "." };
 
         final long startTime = System.currentTimeMillis();
-        final CompleteJavaFileCreator creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourceFiles);
+        final CompleteJavaFileCreator creator;
+        try {
+            final List<String> srcPathList = new ArrayList<>();
+            for(final String s : sourcePathList)
+                srcPathList.add(sonarBaseDir + File.separatorChar + s);
+            final String[] src = srcPathList.toArray(new String[srcPathList.size()]);
+            creator = new CompleteJavaFileCreator(src, classpathEntries, src);
+        } catch (final Exception e) {
+            if (LOG.isErrorEnabled())
+                LOG.error("Could not create java file creator for following entries: " + sourcePathList, e);
+            return;
+        }
         final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
         try {
             codeLevelModel.create(creator);
