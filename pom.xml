@@ -83,17 +83,19 @@
           <scope>provided</scope>
       </dependency>
 
+      <!-- Tests: -->
       <dependency>
-          <groupId>commons-lang</groupId>
-          <artifactId>commons-lang</artifactId>
-          <version>2.6</version>
+          <groupId>org.sonarsource.orchestrator</groupId>
+          <artifactId>sonar-orchestrator</artifactId>
+          <version>3.13</version>
       </dependency>
-
       <dependency>
-          <groupId>org.slf4j</groupId>
-          <artifactId>slf4j-api</artifactId>
-          <version>1.7.21</version>
+          <groupId>commons-logging</groupId>
+          <artifactId>commons-logging</artifactId>
+          <version>1.2</version>
+          <scope>provided</scope>
       </dependency>
+      <!-- Tests -->
 
   	<dependency>
          <groupId>padl-analyses</groupId>
@@ -119,11 +121,11 @@
          <version>1.0</version>
     </dependency>
 
-	<dependency>
-         <groupId>commons-io</groupId>
-         <artifactId>commons-io</artifactId>
-         <version>1.0</version>
-    </dependency>
+      <dependency>
+          <groupId>commons-io-for-padl</groupId>
+          <artifactId>commons-io</artifactId>
+          <version>1.0</version>
+      </dependency>
 
     <dependency>
          <groupId>ptidej</groupId>
@@ -305,8 +307,6 @@
  	</dependency>
 
 
-
-
   </dependencies>
 
   	<build>
@@ -348,6 +348,22 @@
                     </execution>
                 </executions>
             </plugin>
+
+            <!-- integration testing -->
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-failsafe-plugin</artifactId>
+                <version>2.20.1</version>
+                <executions>
+                    <execution>
+                        <goals>
+                            <goal>integration-test</goal>
+                            <goal>verify</goal>
+                        </goals>
+                    </execution>
+                </executions>
+            </plugin>
+            <!-- integration testing -->
 
             <plugin>
                 <groupId>org.sonarsource.scanner.maven</groupId>

@@ -1,0 +1,19 @@
+<?xml version='1.0' encoding='UTF-8'?>
+<profile>
+  <name>custom-rules-profile</name>
+  <language>java</language>
+  <rules>
+    <rule>
+      <repositoryKey>code_smells</repositoryKey>
+      <key>class_data_private</key>
+      <priority>MAJOR</priority>
+      <parameters/>
+    </rule>
+    <rule>
+      <repositoryKey>code_smells</repositoryKey>
+      <key>antisingleton</key>
+      <priority>MAJOR</priority>
+      <parameters/>
+    </rule>
+  </rules>
+</profile>

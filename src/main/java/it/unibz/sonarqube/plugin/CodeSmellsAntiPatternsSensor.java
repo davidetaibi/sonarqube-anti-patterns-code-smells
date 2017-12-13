@@ -35,7 +35,6 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator;
 import padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator;
 import padl.kernel.ICodeLevelModel;
-import padl.kernel.exception.CreationException;
 import padl.kernel.impl.Factory;
 import ptidej.solver.Occurrence;
 import ptidej.solver.OccurrenceBuilder;

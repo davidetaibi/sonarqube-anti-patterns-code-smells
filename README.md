@@ -55,6 +55,10 @@ This plug-in has been tested with Sonarqube 6.3 and 6.7
     1. _Repository:_ "Code-smell rules repository Java"
     2. _Tags:_ "antipattern","code-smell"
 
+## Compiling the source code
+
+Use `mvn clean verify` to ensure the launching of integration tests
+
 ## Roadmap
 
 * Increasing analysis performances 

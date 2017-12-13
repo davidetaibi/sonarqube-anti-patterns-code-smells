@@ -261,3 +261,12 @@ mvn deploy:deploy-file -DgroupId=org.eclipse.core.runtime.compatibility.registry
   -Dfile=${project.basedir}/lib/org.eclipse.core.runtime.compatibility.registry-1.0.jar
   -DrepositoryId=gv-maven-repo
   -Durl=https://gv-maven-repo.appspot.com/
+
+
+mvn deploy:deploy-file -DgroupId=commons-io-for-padl
+  -DartifactId=commons-io
+  -Dversion=1.0
+  -Dpackaging=jar
+  -Dfile=${project.basedir}/lib/commons-io-1.0.jar
+  -DrepositoryId=gv-maven-repo
+  -Durl=https://gv-maven-repo.appspot.com/

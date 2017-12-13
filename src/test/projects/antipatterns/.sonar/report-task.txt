@@ -1,0 +1,5 @@
+projectKey=antipattern-rules
+serverUrl=http://localhost:64353
+dashboardUrl=http://localhost:64353/dashboard/index/antipattern-rules
+ceTaskId=AWBrtEzS70kd75TL-LYh
+ceTaskUrl=http://localhost:64353/api/ce/task?id=AWBrtEzS70kd75TL-LYh

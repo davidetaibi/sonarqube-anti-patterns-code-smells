@@ -10,7 +10,9 @@
       </profile>
     </annotationProcessing>
     <bytecodeTargetLevel>
+      <module name="main" target="1.8" />
       <module name="sonarqube-anti-patterns-code-smells" target="1.8" />
+      <module name="test" target="1.8" />
     </bytecodeTargetLevel>
   </component>
 </project>

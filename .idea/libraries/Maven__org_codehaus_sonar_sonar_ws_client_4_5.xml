@@ -1,0 +1,13 @@
+<component name="libraryTable">
+  <library name="Maven: org.codehaus.sonar:sonar-ws-client:4.5">
+    <CLASSES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/sonar/sonar-ws-client/4.5/sonar-ws-client-4.5.jar!/" />
+    </CLASSES>
+    <JAVADOC>
+      <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/sonar/sonar-ws-client/4.5/sonar-ws-client-4.5-javadoc.jar!/" />
+    </JAVADOC>
+    <SOURCES>
+      <root url="jar://$MAVEN_REPOSITORY$/org/codehaus/sonar/sonar-ws-client/4.5/sonar-ws-client-4.5-sources.jar!/" />
+    </SOURCES>
+  </library>
+</component>
