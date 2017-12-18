@@ -115,9 +115,11 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         final String[] sourceFiles = new String[] { "." };
 
         final long startTime = System.currentTimeMillis();
-        final CompleteJavaFileCreator creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourceFiles);
-        final ICodeLevelModel codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
+        final CompleteJavaFileCreator creator;
+        final ICodeLevelModel codeLevelModel;
         try {
+            creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourceFiles);
+            codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
             codeLevelModel.create(creator);
         } catch (Exception e) {
             LOG.error("Could not create code level model, creating took {}ms", (System.currentTimeMillis() - startTime), e);
