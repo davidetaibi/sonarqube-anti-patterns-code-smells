@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.unibz.sonarqube_extension</groupId>
   <artifactId>codesmellsantipatterns</artifactId>
-  <version>0.6</version>
+  <version>0.7</version>
   <name>Code Smells and Anti Patterns detection</name>
   <description>A plugin for analysing code smells and antipatterns through the ptidej library</description>
   <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>

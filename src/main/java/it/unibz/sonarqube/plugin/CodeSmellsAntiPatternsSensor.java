@@ -112,13 +112,12 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
         final String[] sourcePathEntries = sourcePathList.toArray(new String[sourcePathList.size()]);
         final String[] classpathEntries = new String[] { "" };
-        final String[] sourceFiles = new String[] { "." };
 
         final long startTime = System.currentTimeMillis();
         final CompleteJavaFileCreator creator;
         final ICodeLevelModel codeLevelModel;
         try {
-            creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourceFiles);
+            creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourcePathEntries);
             codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
             codeLevelModel.create(creator);
         } catch (Exception e) {
