@@ -57,12 +57,15 @@ This plug-in has been tested with Sonarqube 6.3 and 6.7
 
 ## Compiling the source code
 
-Use `mvn clean verify` to ensure the launching of integration tests
+Run `mvn clean verify` to ensure the launching of integration tests while building
+
+Run `mvn sonar:sonar -Dsonar.login=PRIVATE_TOKEN` to analyse the project on [sonarcloud.io](https://sonarcloud.io/dashboard?id=it.unibz.sonarqube_extension%3Acodesmellsantipatterns)
 
 ## Roadmap
 
 * Increasing analysis performances 
 * Standalone implementation (without the ptidej-5 libraries) 
+    * Integration tests and reimplementation of every single code smell from [ptidej source](https://github.com/ptidejteam/SmellDetectionCaller/tree/master/SAD/src/sad/codesmell/detection/repository)
 * Empirical study to test the code smell effectiveness 
 
 
