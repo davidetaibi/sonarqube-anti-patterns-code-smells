@@ -35,12 +35,15 @@ import org.sonar.api.batch.sensor.issue.NewIssueLocation;
 import padl.creator.javafile.eclipse.astVisitors.ConditionalModelAnnotator;
 import padl.creator.javafile.eclipse.astVisitors.LOCModelAnnotator;
 import padl.kernel.ICodeLevelModel;
+import padl.kernel.IFactory;
 import padl.kernel.impl.Factory;
 import ptidej.solver.Occurrence;
 import ptidej.solver.OccurrenceBuilder;
 import ptidej.solver.OccurrenceComponent;
 import padl.creator.javafile.eclipse.CompleteJavaFileCreator;
 import sad.designsmell.detection.IDesignSmellDetection;
+
+import javax.annotation.Nonnull;
 
 public class CodeSmellsAntiPatternsSensor implements Sensor {
 
@@ -76,9 +79,10 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
 
     private static Logger LOG = LoggerFactory.getLogger(CodeSmellsAntiPatternsSensor.class);
     private SensorContext context;
+    private IFactory factory = Factory.getInstance();
 
     @Override
-    public void describe(SensorDescriptor sensorDescriptor) {
+    public void describe(@Nonnull final SensorDescriptor sensorDescriptor) {
         sensorDescriptor
                 .name("Code Smell Anti-pattern Sensor")
                 .onlyOnLanguage("java")
@@ -86,7 +90,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
     }
 
     @Override
-    public void execute(SensorContext sensorContext) {
+    public void execute(@Nonnull final SensorContext sensorContext) {
         context = sensorContext;
 
         final String sonarBaseDir = context.settings().getString("sonar.projectBaseDir");
@@ -110,7 +114,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
                     sourcePathList.add(moduleName + File.separatorChar + sourceName);
         LOG.debug("Source path entries {}", sourcePathList);
 
-        final String[] sourcePathEntries = sourcePathList.toArray(new String[sourcePathList.size()]);
+        final String[] sourcePathEntries = sourcePathList.toArray(new String[0]);
         final String[] classpathEntries = new String[] { "" };
 
         final long startTime = System.currentTimeMillis();
@@ -118,7 +122,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         final ICodeLevelModel codeLevelModel;
         try {
             creator = new CompleteJavaFileCreator(sourcePathEntries, classpathEntries, sourcePathEntries);
-            codeLevelModel = Factory.getInstance().createCodeLevelModel("Codesmells");
+            codeLevelModel = factory.createCodeLevelModel("Codesmells");
             codeLevelModel.create(creator);
         } catch (Exception e) {
             LOG.error("Could not create code level model, creating took {}ms", (System.currentTimeMillis() - startTime), e);
@@ -398,4 +402,7 @@ public class CodeSmellsAntiPatternsSensor implements Sensor {
         }
     }
 
+    public void setFactory(IFactory factory) {
+        this.factory = factory;
+    }
 }

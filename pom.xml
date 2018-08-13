@@ -4,7 +4,7 @@
   <modelVersion>4.0.0</modelVersion>
   <groupId>it.unibz.sonarqube_extension</groupId>
   <artifactId>codesmellsantipatterns</artifactId>
-  <version>0.7</version>
+  <version>0.8</version>
   <name>Code Smells and Anti Patterns detection</name>
   <description>A plugin for analysing code smells and antipatterns through the ptidej library</description>
   <url>https://github.com/davidetaibi/sonarqube-anti-patterns-code-smells</url>
@@ -305,6 +305,15 @@
  		<artifactId>motifs</artifactId>
  		<version>1.0</version>
  	</dependency>
+
+      <!-- unit testing -->
+      <dependency>
+          <groupId>org.mockito</groupId>
+          <artifactId>mockito-core</artifactId>
+          <version>2.10.0</version>
+          <scope>test</scope>
+      </dependency>
+
 
 
   </dependencies>
